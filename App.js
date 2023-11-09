@@ -35,6 +35,7 @@ import EditSeanceScreen from './pages/Seance/EditSeanceScreen';
 import ChallengesScreen from './pages/Challenge/ChallengesScreen';
 import ChallengeScreen from './pages/Challenge/ChallengeScreen';
 import InscrireChallenge from './pages/Challenge/InscrireChallengeScreen';
+import FirstScreen from './pages/Account/FirstScreen';
 
 
 
@@ -45,16 +46,23 @@ export default function App() {
     <GlobalStateProvider>
           <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen 
+          name="First" 
+          component={FirstScreen}
+          options={{headerShown: false}}
+        />
+      <Stack.Screen 
+          name="Log" 
+          component={LogScreen}
+          options={{headerShown: false}}
+        />
+
         <Stack.Screen 
           name="Home" 
           component={HomeScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen 
-          name="Log" 
-          component={LogScreen}
-          options={{headerShown: false}}
-        />
+
         <Stack.Screen 
           name="Sign" 
           component={SignScreen}

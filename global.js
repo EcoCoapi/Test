@@ -13,14 +13,16 @@ export const GlobalStateProvider = ({ children }) => {
     const [currentChallengeEco, setCurrentChallengeEco] = useState(null)
     const [currentGroupeChallengeEco, setCurrentGroupeChallengeEco] = useState(null)
 
-    const [isAdmin, setAdmin] = useState(true)
+    const url = "https://app-6ce05b9a-0764-405a-b307-00ab053ef906.cleverapps.io"
+
+    const [isAdmin, setAdmin] = useState(false)
 
 
 
     return (
         <GlobalStateContext.Provider
             value={
-                {
+                {   
                     currentChallengeEco, setCurrentChallengeEco,
                     currentGroupeChallengeEco, setCurrentGroupeChallengeEco,
                     currentSeance, setCurrentSeance,
@@ -29,7 +31,8 @@ export const GlobalStateProvider = ({ children }) => {
                     currentClasse, setCurrentClasse,
                     currentEcole, setCurrentEcole, 
                     currentDoc, setCurrentDoc, 
-                    isAdmin , setAdmin
+                    isAdmin , setAdmin, 
+                    url
                 }
             }
         >

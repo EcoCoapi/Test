@@ -1,22 +1,42 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View , StyleSheet, Text} from "react-native";
 import NavBar from "../../component/NavBar";
 import Document from "../../component/Document";
 import ReturnPreviousScreen from "../../component/ReturnPreviousScreen";
+import { GlobalStateContext } from "../../global";
+import axios from "axios";
 
 export default function DocsScreen ({navigation}) {
+
+    const {url} = useContext(GlobalStateContext)
 
     const [listeDocs, setListDocs] = useState([])
     const [isLoad , setIsLoad] = useState(false)
 
 
-    const loadData = () => {
+    const loadData = async () => {
         // Fonction ou charger les données
         setIsLoad(false)
 
+        const reponse = await fetch(`${url}/documents/`)
+
+        const data = await reponse.json()
+
         const newList = listeDocs
-        newList.push(<Document key={1} navigation={navigation} name={'Doc 1'}/>)
-        newList.push(<Document key={2} navigation={navigation} name={'Doc 2'}/>)
+
+        data.map(doc => {
+            
+            newList.push(
+                <Document 
+                    key={doc.IdDocument} 
+                    navigation={navigation} 
+                    desc={doc.description}
+                    name={doc.nom}
+                    url={doc.lien}
+                />
+            )
+        })
+
         setListDocs(newList)
 
         setIsLoad(true)

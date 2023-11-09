@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { Pressable, View, StyleSheet, Image } from "react-native";
+import { Pressable, View, StyleSheet, Image, Text } from "react-native";
 import { GlobalStateContext } from "../global";
 import { useNavigation } from "@react-navigation/native";
 
 
 
-export default function ReturnPreviousScreen () {
+export default function ReturnPreviousScreen ({titre}) {
 
     const navigation = useNavigation();
 
@@ -21,16 +21,21 @@ export default function ReturnPreviousScreen () {
 
 
     return (
-        <View>
+        <View style={styles.navbar}>
             <Pressable onPress={handleGoBack}>
                 <Image
                     style={styles.image}
-                    source={require('../assets/leftArrow.png')}
+                    source={require('../assets/Header/fleche-gauche-bouton-noir-carre.png')}
                 
                 />
-
-
             </Pressable>
+            <View style={{ alignItems : 'center', justifyContent: 'center', position : 'absolute', width : "100%"}}>
+                    <Text style={{
+                        fontSize : 27, 
+                        textAlign : 'center',
+                    }}>{titre}
+                    </Text>
+                </View>
 
 
 
@@ -41,15 +46,24 @@ export default function ReturnPreviousScreen () {
 
 const styles = StyleSheet.create({
 
-    constainer : {
+    container : {
+
         display : 'flex',
 
 
     },
+    navbar : {
+        flexGrow : 1,
+        display : "flex", 
+        flexDirection : 'row', 
+        alignItems : 'center',
+        height : '10%',
+        margin : '2%'
+    }, 
 
     image : {
-        width : 30,
-        height : 30
+        width : 40,
+        height : 40
     },
 
 

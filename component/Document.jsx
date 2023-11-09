@@ -3,12 +3,16 @@ import { StyleSheet, View, Image, Pressable , Text} from "react-native";
 import { GlobalStateContext } from './../global';
 
 
-export default function Document ({navigation, name, url}) {
+export default function Document ({navigation, name, desc,  url}) {
 
     const {currentDoc, setCurrentDoc} = useContext(GlobalStateContext)
 
     const handleGoDoc = () => {
-        setCurrentDoc({name})
+        setCurrentDoc({
+            nom : name, 
+            description : desc,
+            url : url
+        })
         navigation.navigate('Doc')
     }
 
