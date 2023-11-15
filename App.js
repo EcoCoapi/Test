@@ -36,6 +36,7 @@ import ChallengesScreen from './pages/Challenge/ChallengesScreen';
 import ChallengeScreen from './pages/Challenge/ChallengeScreen';
 import InscrireChallenge from './pages/Challenge/InscrireChallengeScreen';
 import FirstScreen from './pages/Account/FirstScreen';
+import EditAdminScreen from './pages/Account/EditAdminScreen';
 
 
 
@@ -71,6 +72,11 @@ export default function App() {
         <Stack.Screen 
           name="Admin" 
           component={AdminScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen 
+          name="Edit-Admin" 
+          component={EditAdminScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen 

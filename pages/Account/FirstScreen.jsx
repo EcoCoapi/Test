@@ -24,6 +24,10 @@ export default function FirstScreen ({navigation}) {
         navigation.navigate("Sign")
     }
 
+    const handleGoHome = () => {
+        navigation.navigate('Home')
+    }
+
 
     return (
 
@@ -36,6 +40,7 @@ export default function FirstScreen ({navigation}) {
                 <Text style={styles.textEco}>Bienvenue sur Eco Eco mobile</Text>
                 <CustomButton color={"#fff"} text={"SE CONNECTER"} textColor={"#F6973D"} width={"65%"} action={handleGoLogin}/>
                 <CustomButton color={"#fff"} text={"S'INSCRIRE"} textColor={"#F6973D"} width={"65%"} action={handleGoSingIn}/>
+                {isAdmin ?<CustomButton color={"#fff"} text={"ACCEUIL"} textColor={"#F6973D"} width={"65%"} action={handleGoHome}/> : null}
             </View>
 
             <View style={{flex : 1, gap :  10 , flexDirection : 'column',  backgroundColor : "#fff", borderTopLeftRadius : 500, paddingHorizontal : "5%"}}>

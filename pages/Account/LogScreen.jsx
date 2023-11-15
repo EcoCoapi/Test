@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import {View, Text, StyleSheet, TextInput, Button, Image} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Button, Image, ActivityIndicator} from 'react-native'
 import NavBar from '../../component/NavBar'
 import { GlobalStateContext } from '../../global'
 import ReturnPreviousScreen from '../../component/ReturnPreviousScreen'
@@ -8,33 +8,69 @@ import CustomButton from '../../component/CustomButton'
 import { LinearGradient } from 'expo-linear-gradient'
 import HideShow from '../../component/HideShow'
 import Input from '../../component/Input'
+import bycrypt from 'bcryptjs';
 
 
 
 export default function LogScreen ({navigation}) {
 
-    const {isAdmin, setAdmin, url} = useContext(GlobalStateContext)
+    const {isAdmin, setIsAdmin, url, saltHash, setCurrentUser} = useContext(GlobalStateContext)
 
     const [mail, setMail] = useState(null)
     const [mdp, setMdp] = useState(null)
 
-
-    const [hidePassword, setHidePassword] = useState(true)
-
+    const [isWaiting, setIsWaiting] = useState(false)
     
+
+    const [showErreurLogIn, setShowErreurLogIn] = useState(false)
+
 
     const handleLogIn = async () => {
         //Ajouter la fonction de conection
         
-        const body = {
-            mail : mail 
-        }
+        setIsWaiting(true)
 
 
-        const data = await axios.get(`https://app-6ce05b9a-0764-405a-b307-00ab053ef906.cleverapps.io/comptes`, body)
-        console.log(data.data)
+        await axios.get(`${url}/comptes/${mail}`)
+            .then(response => {
+                if(response.data.length === 1) {
 
-       //navigation.navigate('Home')
+                    let Rmdp 
+                    let Rmail
+
+                    response.data.map(item => {
+                        Rmdp = item.motDePasse
+                        Rmail = item.mail
+
+                    })
+                    console.log(Rmail.toLowerCase().length , mail.toLowerCase().length)
+
+                    if(((Rmail.toLowerCase()== mail.toLowerCase()) && (Rmdp == bycrypt.hashSync(mdp, saltHash)))) {
+                        response.data.map(item => {
+                            setCurrentUser(item)
+    
+                        })
+                        setIsAdmin(true)
+                        navigation.navigate('Home')
+                    }else {
+                        setShowErreurLogIn(true)
+                    }
+                    
+                    
+                }else {
+                    console.log("Aucun compte")
+                    setShowErreurLogIn(true)
+                    
+                }
+            })
+            .catch(error => {
+                console.log("Erreyur de la requète : ", error)
+            })
+
+ 
+        setIsWaiting(false)
+       
+
     }
 
     const handleGoToSignIn = () => {
@@ -65,22 +101,27 @@ export default function LogScreen ({navigation}) {
 
 
             </View>
-            
+                {!isWaiting ?
                 <View style={styles.container}>
+                    
                     <Text style={styles.textConnect}>Se connecter</Text>
-                    <Input placeholder={"welcome@eco-eco.com"} text={"Email"} keyboard={'email-adress'} value={mail} setValue={setMail} mdp={null}/>
+                    <Input placeholder={"welcome@eco-eco.com"} text={"Email"} keyboard={'email-address'} value={mail} setValue={setMail} mdp={null}/>
                     <Input placeholder={"*****************"} text={"Mot de passe"} value={mdp} setValue={setMdp} mdp={true} />
-                    <CustomButton width={"40%"} height={"10%"} color={"#F6973D"} text={'Connexion'} textColor={"#fff"}/>
+                    {showErreurLogIn? <Text style={{color : "#C80000", textAlign : 'center', fontSize : 11, fontWeight : '200'}}>{`Il y a une erreur dans l'addresse mail ou le mot de passe. \n Si vous ne posséder pas de compte merci d'en créer un `}</Text> : null}
+                    <CustomButton width={"40%"} height={"10%"} color={"#F6973D"} text={'Connexion'} textColor={"#fff"} action={handleLogIn}/>
             
                     <View style={{alignItems : 'center', gap : 5}}>
                         <Text style={styles.text2}>Mot de passe oublié ?</Text>
-                        <Text style={styles.text2}>Pas de compte ? S'inscrire</Text>
+                        <Text onPress={() => navigation.navigate('Sign')}style={styles.text2}>Pas de compte ? S'inscrire</Text>
 
                     </View>
 
 
+                </View> : 
+                <View style={[styles.container, {justifyContent : 'center'}]}>
+                    <ActivityIndicator size={'large'}/>
                 </View>
-
+                }
         </LinearGradient>
 
     )
@@ -99,7 +140,6 @@ const styles = StyleSheet.create({
         fontWeight : "500", 
         textAlign : 'center', 
         textAlignVertical : 'center', 
-        marginBottom : 20, 
     },
     
     gradient : {
@@ -124,8 +164,9 @@ const styles = StyleSheet.create({
         borderTopLeftRadius : 40,
         borderTopRightRadius : 40,
         paddingVertical : "10%", 
+        paddingTop : "5%",
         paddingHorizontal : "3%",
-        gap : 15
+        gap : 12
     }, 
     textInput : {
         width : "100%", 

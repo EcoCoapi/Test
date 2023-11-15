@@ -2,7 +2,9 @@ import React, { useContext, useState } from "react";
 import { View, Text, Pressable, Image, StyleSheet } from "react-native";
 import { GlobalStateContext } from "../global";
 
-export default function Classe({navigation, name}) {
+const ClasseSource = "../assets/Admin/classe.png"
+
+export default function Classe({navigation, name, nb}) {
 
     const {currentClasse, setCurrentClasse} = useContext(GlobalStateContext)
 
@@ -22,10 +24,9 @@ export default function Classe({navigation, name}) {
 
     return (
         <View style={styles.container}>
-            <Text styles={styles.text}>{nom}</Text>
-            <Pressable onPress={hanldeGoClasse}>
-                <Image style={styles.image} source={require('../assets/rightArrow.png')}/>
-            </Pressable>
+            <Image style={styles.image} source={require(ClasseSource)}/>
+            <Text style={{color : "#fff",fontWeight : '400', fontSize : 21}}>{name}</Text>
+            <Text style={{color : "#fff",fontWeight : '300', fontSize : 13}}>{`${nb} elèves`}</Text>
         </View>
 
 
@@ -36,13 +37,14 @@ export default function Classe({navigation, name}) {
 const styles = StyleSheet.create({
 
     container : {
-        display : 'flex', 
-        flexDirection : 'row',
+        backgroundColor : "#737373", 
+        margin : 10,
+        padding : 10, 
         alignItems : 'center',
-        justifyContent: 'space-between',
-        paddingTop : 30,
-        paddingLeft : 10,
-    
+        opacity : 0.8,
+        borderWidth : 2, 
+        borderStyle : "solid", 
+        borderRadius : 5
     },
     text : {
         fontWeight : 'bold',
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     }, 
     image : {
         
-        width : 30,
-        height : 30
+        width : 70,
+        height : 70
     }
 })

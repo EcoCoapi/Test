@@ -72,8 +72,7 @@ const styles = StyleSheet.create({
         paddingTop : '3%',
         display : 'flex',
         flexDirection : 'column',
-        height : '100%',
-        flexWrap :'wrap', 
+        height : '100%', 
     },
 
     navbar : {

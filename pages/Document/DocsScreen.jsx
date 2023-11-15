@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
-import { View , StyleSheet, Text} from "react-native";
+import { View , StyleSheet, Text, ScrollView} from "react-native";
 import NavBar from "../../component/NavBar";
 import Document from "../../component/Document";
 import ReturnPreviousScreen from "../../component/ReturnPreviousScreen";
 import { GlobalStateContext } from "../../global";
 import axios from "axios";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function DocsScreen ({navigation}) {
 
@@ -21,6 +22,8 @@ export default function DocsScreen ({navigation}) {
         const reponse = await fetch(`${url}/documents/`)
 
         const data = await reponse.json()
+
+        console.log(data)
 
         const newList = listeDocs
 
@@ -43,6 +46,77 @@ export default function DocsScreen ({navigation}) {
     }
 
     return (
+        <LinearGradient 
+            colors={['#CDFFD8', '#94B9FF']} 
+            style={styles.gradient} 
+            start={{x : 0, y:0.5}}
+            end={{x:1, y:0.5}}
+            locations={[0.1, 0.9]}
+            onLayout={isLoad ? null : loadData}
+        >   
+            <View style={styles.navbar}>
+                <ReturnPreviousScreen titre='Documents' navigation={navigation} enable/>
+            </View>
+
+            <ScrollView style={{width : "100%"}}>
+                <View style={styles.container}>
+                    {isLoad ? listeDocs.map(doc => doc): null}
+                </View>
+                
+
+            </ScrollView>
+            
+        </LinearGradient>
+
+    )
+
+
+}
+
+
+const styles = StyleSheet.create({
+
+    gradient : {
+        
+        paddingTop : '3%',
+        display : 'flex',
+        flexDirection : 'column',
+        height : '100%', 
+    },
+
+    navbar : {
+        alignItems : 'center',
+        display : "flex", 
+        flexDirection : 'row', 
+        alignItems : 'center',
+        height : '10%',
+        margin : '2%'
+    }, 
+
+    image : {
+        alignSelf : 'flex-start',
+        width : 30,
+        height : 30
+    },
+
+    container : {
+        display : 'flex', 
+        flexDirection : 'column',
+        width : "100%",
+        gap : 10, 
+        alignItems : 'center',
+    }, 
+
+    button : {
+        width : 150
+    },
+    text :{
+        fontWeight : 'bold',
+        fontSize : 40,
+    }
+
+})
+/*
         <View onLayout={loadData}>
             <NavBar navigation={navigation} screenName={"Documents Screen"}/>
             <View style={styles.container}>
@@ -51,36 +125,4 @@ export default function DocsScreen ({navigation}) {
                 <ReturnPreviousScreen navigation={navigation}/>
             </View>
         </View>
-    )
-
-
-}
-
-const styles = StyleSheet.create({
-
-    container : {
-        paddingTop : 0,
-        height : "92%",
-        display : 'flex', 
-        flexDirection : 'column',
-        alignItems : 'center', 
-        justifyContent : 'center',
-        alignSelf : 'center', 
-        width : "100%",
-        backgroundColor : "#e0f5ae",
-        gap : 50,
-        padding : 10
-    }, 
-    textInput : {
-        borderStyle : 'solid',
-        borderWidth : 1, 
-        width : "100%", 
-        height : 50,
-        backgroundColor : "#fff", 
-        textAlign : 'center'
-    }, 
-    text :{
-        fontWeight : 'bold',
-        fontSize : 20,
-    }
-})
+*/

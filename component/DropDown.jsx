@@ -9,10 +9,8 @@ export default function DropDown({type, width, data, value, setValue, placeholde
 
     const handleChange = (a) => {
         setIsChange(true)
-        setChoice(a)
-        setValue(a)
+        setValue(a[`${valueField}`])
         setIsChange(false)
-        console.log(a)
     }
 
     return (
@@ -31,15 +29,16 @@ export default function DropDown({type, width, data, value, setValue, placeholde
                         
                     }}
                     search
+
                     searchPlaceholder={`Rechercher une ${type.toLowerCase()}`}
                     inputSearchStyle ={{backgroundColor : "#D9D9D9", borderRadius : 10}}
                     itemContainerStyle = {{display : 'flex', backgroundColor : "#D9D9D9", borderRadius : 10}}
                     containerStyle={{ borderRadius : 10,backgroundColor : "#FFF", shadowColor : 'tranparent', shadowRadius : 10}}
                     placeholderStyle={{color : "#adadad", paddingHorizontal : "3%"}}
                     placeholder={placeholder}
-                    value={isChange ? value : choice}
+                    value={isChange ? value : value ? value : choice}
                     onChange={item => {
-                        handleChange(item.value)
+                        handleChange(item)
                     }}
                     labelField={labelField}
                     valueField={valueField}

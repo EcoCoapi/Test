@@ -14,7 +14,7 @@ export default function Input({width, mdp, text, keyboard, placeholder, value, s
                 mdp === null ? 
                 <TextInput  style={styles.textInput} keyboardType={keyboard} placeholder={placeholder} value={value} onChangeText={setValue}/> :
                 <View style={{display : 'flex', flexDirection : 'row', alignItems : "center", gap : 5}}>
-                    <TextInput secureTextEntry={hideMdp} style={styles.textInput} keyboardType={keyboard} se placeholder={placeholder}value={value} onChangeText={setValue}/>
+                    <TextInput secureTextEntry={hideMdp} style={styles.textInput} keyboardType={keyboard} placeholder={placeholder} defaultValue={value ? value : null} value={value} onChangeText={setValue}/>
                     <HideShow state={hideMdp} setState={setHideMdp}/>
                 </View>  
             }
