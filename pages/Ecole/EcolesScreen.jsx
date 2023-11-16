@@ -9,6 +9,7 @@ import EcoleButton from "../../component/EcoleButton";
 import { GlobalStateContext } from "../../global";
 import ImageButton from "../../component/ImageButon";
 import MarkerMap from "../../component/MarkerMap";
+import DropDown from "../../component/DropDown";
 
 const CarteSource = '../../assets/carte.png'
 
@@ -17,11 +18,13 @@ export default function EcolesScreen({navigation}) {
 
 
 
-    const {url, LISTE_DEPT} = useContext(GlobalStateContext)
+    const {url, LISTE_DEPT, isAdmin} = useContext(GlobalStateContext)
 
     const [isEnabled, setIsEnabled] = useState(false)
     const [isFiltreHide, setFiltreHide] = useState(true)
+
     const [listeEcoles, setListeEcoles] = useState([])
+    const [listeEcolesFiltre, setListeEcolesFiltre] = useState([])
     const [isLoad, setIsLoad] = useState(false);
 
     const [carteImageLoad, setCarteImageLoad] = useState(true)
@@ -33,9 +36,12 @@ export default function EcolesScreen({navigation}) {
     const [menuExtend, setMenuExtend] = useState(false)
     const [isMapActive, setMapActive] = useState(false)
 
+    const [deptFiltre, setDeptFiltre] = useState(null)
+
    
 
     const [isShowDept, setIsShowDept] = useState(false)
+    const [isShowParis, setIsShowParis] = useState(false)
 
     const handleSwitch = () => {
         setIsEnabled(!isEnabled)
@@ -62,17 +68,21 @@ export default function EcolesScreen({navigation}) {
                 s = item.dep_name
             }
         })
+        num === 0 ? s = "Grand-Paris" : null
+        num === 100 ? s = "Haute-Corse" : null
+        num === 101 ? s = "Corse-du-Sud" : null
+
         return s
     }
 
     const loadData = async () => {
         setIsLoad(false)
 
-        const newList = listeEcoles
         const response = await fetch(`${url}/ecole`)
         const data = await response.json()
         
         setListeEcoles(data)
+        setListeEcolesFiltre(data)
         setIsLoad(true)
     }
 
@@ -84,11 +94,18 @@ export default function EcolesScreen({navigation}) {
             region : "Corse" ,
             top : "81%",
             left : "91%", 
-            deptMarker : [{
-                dept : 83, 
-                top : "", 
-                left : ""
-            }]
+            deptMarker : [
+            {
+                dept : 100, 
+                top : "35%", 
+                left : "55%"
+            },
+            {
+                dept : 101, 
+                top : "70%", 
+                left : "47%"
+            },
+        ]
 
         },
         {
@@ -208,8 +225,8 @@ export default function EcolesScreen({navigation}) {
         },
         {
             region : "Auvergne-Rhône-Alpes" ,
-            top : "54%",
-            left : "64%", 
+            top : "55%",
+            left : "62%", 
             deptMarker : [
             {
                 dept : 3, 
@@ -280,23 +297,102 @@ export default function EcolesScreen({navigation}) {
         },
         {
             region : "Bourgogne-Franche-Comté", 
-            top : "42%",
-            left : "58%", 
-            deptMarker : [{
-                dept : 83, 
-                top : "", 
-                left : ""
-            }]
+            top : "43%",
+            left : "61%", 
+            deptMarker : [
+            {
+                dept : 25, 
+                top : "51%", 
+                left : "76%"
+            },
+            {
+                dept : 70, 
+                top : "38%", 
+                left : "67%"
+            },
+            {
+                dept : 21, 
+                top : "45%", 
+                left : "41%"
+            },
+            {
+                dept : 89, 
+                top : "35%", 
+                left : "14%"
+            },
+            {
+                dept : 58, 
+                top : "52%", 
+                left : "15%"
+            },
+            {
+                dept : 71, 
+                top : "62%", 
+                left : "30%"
+            },
+            {
+                dept : 39, 
+                top : "60%", 
+                left : "65%"
+            },
+        ]
         },
         {
             region : "Grand Est", 
-            top : "31%",
-            left : "80%", 
-            deptMarker : [{
-                dept : 83, 
-                top : "", 
-                left : ""
-            }]
+            top : "29%",
+            left : "77%", 
+            deptMarker : [
+            {
+                dept : 8, 
+                top : "32%", 
+                left : "21%"
+            },
+            {
+                dept : 51, 
+                top : "45%", 
+                left : "17%"
+            },
+            {
+                dept : 10, 
+                top : "60%", 
+                left : "17%"
+            },
+            {
+                dept : 52, 
+                top : "63%", 
+                left : "34%"
+            },
+            {
+                dept : 88, 
+                top : "62.5%", 
+                left : "63%"
+            },
+            {
+                dept : 68, 
+                top : "65.5%", 
+                left : "77%"
+            },
+            {
+                dept : 67, 
+                top : "49.3%", 
+                left : "83%"
+            },
+            {
+                dept : 57, 
+                top : "41%", 
+                left : "58%"
+            },
+            {
+                dept : 54, 
+                top : "52%", 
+                left : "49%"
+            },
+            {
+                dept : 55, 
+                top : "46%", 
+                left : "39.5%"
+            },
+        ]
         },
         {
             region : "Hauts-de-France", 
@@ -319,33 +415,106 @@ export default function EcolesScreen({navigation}) {
                 left : "32%"
             },
             {
-                dept : 60, 
-                top : "68%", 
-                left : "32%"
+                dept : 2, 
+                top : "57%", 
+                left : "74%"
+            },
+            {
+                dept : 59, 
+                top : "37%", 
+                left : "67%"
             },
         ]
         },
         {
             region : "Île-de-France", 
             top : "31%",
-            left : "55%", 
-            deptMarker : [
+            left : "51%", 
+            deptMarker : 
+            [
             {
-                dept : 86, 
-                top : "", 
-                left : ""
+                dept : 78, 
+                top : "43%", 
+                left : "21%"
+            },
+            {
+                dept : 95, 
+                top : "32%", 
+                left : "33%"
+            },
+            {
+                dept : 77, 
+                top : "50%", 
+                left : "64%"
+            },
+            {
+                dept :91, 
+                top : "57%", 
+                left : "37%"
+            },
+            {
+                dept : 0, 
+                top : "42%", 
+                left : "40%"
+            },
+            {
+                dept : 75, 
+                top : "39%", 
+                left : "41%"
+            },
+            {
+                dept : 92, 
+                top : "50%", 
+                left : "24%"
+            },
+            {
+                dept : 94, 
+                top : "52%", 
+                left : "60%"
+            },
+            {
+                dept : 93, 
+                top : "30%", 
+                left : "63%"
             },
         ]
         },
         {
             region : "Centre-Val de Loire", 
-            top : "40%",
-            left : "48%", 
-            deptMarker : [{
-                dept : 83, 
-                top : "", 
-                left : ""
-            }]
+            top : "39%",
+            left : "40%", 
+            deptMarker : [
+            {
+                dept : 18, 
+                top : "68%", 
+                left : "76%"
+            },
+            {
+                dept : 36, 
+                top : "75%", 
+                left : "48%"
+            },
+            {
+                dept : 37, 
+                top : "59%", 
+                left : "15%"
+            },
+            {
+                dept : 41, 
+                top : "53%", 
+                left : "45%"
+            },
+            {
+                dept : 45, 
+                top : "39%", 
+                left : "70%"
+            },
+            {
+                dept : 28, 
+                top : "25%", 
+                left : "40%"
+            },
+        ]
         },
         {
             region : "Normandie", 
@@ -458,7 +627,7 @@ export default function EcolesScreen({navigation}) {
             },
             {
                 dept : 17, 
-                top : "29%", 
+                top : "33%", 
                 left : "17%"
             },
             {
@@ -507,6 +676,42 @@ export default function EcolesScreen({navigation}) {
         }
     ]
 
+    const filtreEcoleDept = (dept) => {
+
+        const newList = []
+
+        listeEcoles.map(ecole => {
+            parseInt(ecole.departement) === dept ? newList.push(ecole) : null
+        })
+
+        return newList
+
+
+    }
+
+
+
+    const showList = (dept) => {
+
+        if(dept.dept === 0) {
+            setIsShowParis(true)
+
+
+            setSourceImage(require(`../../assets/Region/Île-de-France/paris2.png`))
+
+
+        }else {
+
+
+            setListeEcolesFiltre(filtreEcoleDept(dept.dept))
+            setDeptFiltre(dept.dept)
+            setIsShowDept(false)
+            setIsShowParis(false)
+            setMapActive(false)
+
+        }
+
+    }
 
     const showDept = (region) => {
         setCarteImageLoad(false)
@@ -567,9 +772,16 @@ export default function EcolesScreen({navigation}) {
     }
 
     const handleGoCarte = () => {
-        setSourceImage(require(CarteSource))
-        setRegion(null)
-        setIsShowDept(false)
+        if(isShowParis){
+            setIsShowParis(false)
+            setSourceImage(require('../../assets/Region/Île-de-France/region.png'))
+
+        }else {
+            setSourceImage(require(CarteSource))
+            setRegion(null)
+            setIsShowDept(false)
+        }
+
     }
 
     const getNbEcoleRegion = (region) => {
@@ -590,12 +802,31 @@ export default function EcolesScreen({navigation}) {
         let n = 0;
 
         listeEcoles.map(ecole => {
-            ecole.dept == dept ? n++: null
+            parseInt(ecole.departement) === dept ? n++: null
+            if(dept === 0) (
+                (parseInt(ecole.departement) === 77) || 
+                (parseInt(ecole.departement) === 91) || 
+                (parseInt(ecole.departement) === 78) ||
+                (parseInt(ecole.departement) === 95) ||
+                (parseInt(ecole.departement) === 75) ||
+                (parseInt(ecole.departement) === 92) ||
+                (parseInt(ecole.departement) === 94) || 
+                (parseInt(ecole.departement) === 93)    
+            )? n++ : null // Cas Grand Paris
         })
 
         return n
 
 
+    }
+
+    const verifParis = (dept) => {
+
+        return dept != 91 && dept != 78 && dept != 77 && dept != 95 && dept != 0
+    }
+    const verifParis2 = (dept) => {
+
+        return dept != 94 && dept != 92 && dept != 75 && dept != 93
     }
 
 
@@ -606,7 +837,6 @@ export default function EcolesScreen({navigation}) {
             colors={['#8C52FF', '#5CE1E6']} 
             style={styles.gradient} 
             start={{x : 0, y:0.5}}
-            end={{x:1, y:0.5}}
             locations={[0.1, 0.9]}
             
     >   
@@ -626,41 +856,57 @@ export default function EcolesScreen({navigation}) {
         
         {isMapActive ? 
             <View style={{padding : "3%"}}>
-                <Text style={{color : "#fff", textAlign : 'center', alignSelf : 'center',  position : 'absolute', fontWeight : '500', fontStyle : "italic", fontSize : 20}}>{region ? region.region : 'Carte de France'}</Text>
+                <Text style={{color : "#fff", textAlign : 'center', alignSelf : 'center',  position : 'absolute', fontWeight : '500', fontStyle : "italic", fontSize : 20}}>{isShowParis ? "Grand-Paris" : region ? region.region : 'Carte de France'}</Text>
                 <Image style={{height : 500,  width : "100%", resizeMode : 'contain'}} source={carteImageLoad ? sourceImage : null}/> 
                 {!isShowDept ?
-                    positionMarkerRegion.map((region, index) => getNbEcoleRegion(region.region) != 0 || true? <MarkerMap lieu={region.region} action={() => showDept(region)} key={index} top={region.top} left={region.left} nb={getNbEcoleRegion(region.region)}/> : null)
+                    positionMarkerRegion.map((region, index) => getNbEcoleRegion(region.region) != 0 ? <MarkerMap lieu={region.region} action={() => showDept(region)} key={index} top={region.top} left={region.left} nb={getNbEcoleRegion(region.region)}/> : null)
                     : 
-                    positionMarkerRegion.map(r=> region.region === r.region ? r.deptMarker.map((dept, index) => <MarkerMap lieu={getDeptName(dept.dept)} key={index} left={dept.left} top={dept.top} nb={getNbEcoleDept(dept.dept)}/>) : null)
+                    !isShowParis ? 
+                        positionMarkerRegion.map(r=> region.region === r.region ? r.deptMarker.map((dept, index) => verifParis2(dept.dept)  && getNbEcoleDept(dept.dept) != 0 ? <MarkerMap action={() => showList(dept)} lieu={getDeptName(dept.dept)} key={index} left={dept.left} top={dept.top} nb={getNbEcoleDept(dept.dept)}/> : null) : null) 
+                        : 
+                        positionMarkerRegion.map(r=> region.region === r.region ? r.deptMarker.map((dept, index) => verifParis(dept.dept) && getNbEcoleDept(dept.dept) != 0 ? <MarkerMap action={() => showList(dept)} lieu={getDeptName(dept.dept)} key={index} left={dept.left} top={dept.top} nb={getNbEcoleDept(dept.dept)}/> : null) : null) 
                 }
 
             </View>:
             
-        <ScrollView onLayout={isLoad ? null : loadData} style={{marginBottom : "25%",  display : 'flex', flexDirection:'column', width : "100%", padding : "2%"}}>
-
+        <ScrollView onLayout={isLoad ? null : loadData} style={{marginBottom : isFiltreHide ? "50%" : "85%",  display : 'flex', flexDirection:'column', width : "100%", padding : "2%"}}>
+            <Text style={{textAlign :'center', fontWeight : '400', fontSize : 13, fontStyle : "italic"}}>{`Il y a ${listeEcolesFiltre.length} école${listeEcolesFiltre.length === 1 ? "" : "s"} dans la liste`}</Text>
             
             
             {
                 isLoad ? 
-                listeEcoles.map((ecole, index) => <EcoleButton nom={ecole.nom} ville={ecole.ville} key={index} num={[ecole.idEcole, index]}/>) :
+                listeEcolesFiltre.map((ecole, index) => <EcoleButton navigation={navigation} nom={ecole.nom} ville={ecole.ville} key={index} num={[ecole.idEcole, index]}/>) :
                 null
             }
+            
 
         </ScrollView>
         }
-        <View style={{ margin : "2%", height : "6%", alignItems : 'center', width :'100%'}}>
-            {/*<CustomButton width={"80%"} height="100%" textColor='#fff' text={"Suivant"} color={"#527721"}/>*/}
-        
 
-        </View>
-        <View style={[styles.footer, {height : !isFiltreHide ? "45%" : "15%"}]}>
+        
+        <View style={[styles.footer, {height : !isFiltreHide ? "45%" : "15%", flexDirection :  isFiltreHide? 'row' : 'column', gap : isFiltreHide ? 45 : 20}]}>
+                    
                     {isFiltreHide ? <ImageButton bgColor="#F4F4F4" action={handleHideShowMap} source={isMapActive ? require('../../assets/Ecole/liste.png'): require('../../assets/Ecole/carte.png')} text={isMapActive ? "Liste" : "Map"} color={"#f00"}/> : null}
                     {!isMapActive ? 
                         <ImageButton bgColor="#F4F4F4" action={handleHideShowFiltre} source={isFiltreHide ? require('../../assets/Ecole/loupe.png') : require('../../assets/downArrow.png')} text={!isFiltreHide ? "Cacher les filtres" : "Afficher les filtres"} color={"#f00"}/> 
                         : 
                         isShowDept ? <ImageButton bgColor={"#F4F4F4"} source={require("../../assets/retour.png")} text={"Carte de France"} color={'#f00'} action={handleGoCarte}/> : null
                         }
-
+                    {!isFiltreHide ? <DropDown placeholder={"Gironde"} data={LISTE_DEPT} labelField={'dep_name'} valueField={'num_dep'} value={deptFiltre} setValue={value => {
+                        setListeEcolesFiltre(filtreEcoleDept(parseInt(value)))
+                        setDeptFiltre(value)
+                    }} type={'Département'} /> : null}
+                    {!isFiltreHide ? 
+                    <View style={{width : "100%", height : "20%", padding : "2%", alignItems : 'center', display : 'flex', flexDirection : 'row', justifyContent : 'center', gap : 10}}>
+                        <CustomButton width={"60%"} height={"100%"} text={"Effacer"} color={"#527721"} textColor={"#fff"} action={() => {
+                            setListeEcolesFiltre(listeEcoles)
+                            setFiltreHide(!isFiltreHide)
+                            setDeptFiltre(null)
+                        }} />
+                        {isAdmin ? <ImageButton source={require('../../assets/plus.png')} bgColor="#F4F4F4" action={() => navigation.navigate("Cre-Ecole")}/> :null}
+                    </View>
+                    : 
+                    null}
         </View>
 
         </LinearGradient>
@@ -721,7 +967,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius : 13,
 
         display : 'flex', 
-        flexDirection :'row',
+
     },
 
     gradient : {
