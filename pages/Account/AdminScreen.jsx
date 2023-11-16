@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { View , StyleSheet, TextInput, Button, Text, Image, ScrollView, FlatList, SafeAreaView, SectionList} from 'react-native'
+import { View , StyleSheet, TextInput, Button, Text, Image, ScrollView, FlatList, SafeAreaView, SectionList, TouchableOpacity} from 'react-native'
 import NavBar from '../../component/NavBar'
 import ReturnPreviousScreen from '../../component/ReturnPreviousScreen'
 import { LinearGradient } from 'expo-linear-gradient'
 import { GlobalStateContext } from '../../global'
 import Classe from '../../component/Classe'
 import CustomButton from '../../component/CustomButton'
+import * as ImagePicker from 'expo-image-picker';
 
 
 const ProfileSource = "../../assets/Admin/profil.png"
@@ -19,6 +20,8 @@ export default function AdminScreen({navigation}) {
 
     const [ecole, setEcole] = useState(null)
     const [isLoad, setIsLoad] = useState(null)
+
+    const [profilePicture, setProfilePicture] = useState(null)
 
     const data = [
         {
@@ -74,6 +77,24 @@ export default function AdminScreen({navigation}) {
 
     }
 
+    const addProfilePicture = async () => {
+        console.log("hey")
+        let _image = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4,3],
+            quality: 1,
+          })
+        if (!_image.cancelled) {
+            console.log("oui")
+            setProfilePicture(_image.uri)
+            console.log(_image.uri)
+            console.log(JSON.stringify(_image))
+        }
+  
+
+    }
+
 
     return (
 
@@ -91,7 +112,10 @@ export default function AdminScreen({navigation}) {
             </View>
 
                 <View style={styles.container}>
-                    <Image style={styles.profile}  source={require(ProfileSource)}/>
+                    <TouchableOpacity onPress={addProfilePicture}>
+                        <Image style={styles.profile}  source={{uri : profilePicture}}/>
+                    </TouchableOpacity>
+                    
                     <Text style={styles.text}>{`${currentUser.nom} ${currentUser.prenom}`}</Text>
                     {isLoad ? <Text style={styles.text}>{`${ecole}`}</Text> : null}
                     <FlatList
@@ -152,8 +176,7 @@ const styles = StyleSheet.create({
         height : 140,
         borderRadius : 170/2,
         borderColor : '#3D1E7B',
-        borderWidth : 8, 
-        overflow : 'hidden', 
+        borderWidth : 8,  
 
     },
     

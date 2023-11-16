@@ -49,12 +49,10 @@ export default function HomeScreen ({navigation}) {
                 <HomeScreenButton type={'Documents'} cote={0} action={handleGoDocs}/>
                 <HomeScreenButton type={'Ecoles'} cote={1} action={handleGoEcoles}/>
                 <HomeScreenButton type={'Challenges'} cote={0} action={handleGoChallenges}/>
-                <HomeScreenButton type={'Admin'} cote={1} action={handleGoAdmin}/>
+                {isAdmin ? <HomeScreenButton type={'Admin'} cote={1} action={handleGoAdmin}/> :null }
 
             </View>
-            <View style={styles.footer}>
-                <Text style={{textAlign : 'center', fontSize : 20}}>Page d'acceuil</Text>
-            </View>
+
      
             
         </LinearGradient>

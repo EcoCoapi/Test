@@ -51,6 +51,8 @@ export default function EcolesScreen({navigation}) {
         setFiltreHide(!isFiltreHide)
     }
     const handleHideShowMap = () => {
+        setListeEcolesFiltre(listeEcoles)
+        setDeptFiltre(null)
         setMapActive(!isMapActive)
         setSourceImage(require(CarteSource))
         setIsShowDept(false)

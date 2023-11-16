@@ -12,10 +12,7 @@ import axios from 'axios'
 
 export default function EditAdminScreen({navigation}) {
 
-    const data = [
-        { label : 'Ecole 1', value : '1'},
-        { label : 'Ecole 2', value : '2'}
-    ]
+    const [listeEcole, setListeEcole] = useState(null)
 
     const {currentUser, url, setCurrentUser} = useContext(GlobalStateContext)
 
@@ -115,11 +112,17 @@ export default function EditAdminScreen({navigation}) {
     }
 
 
-    const loadData = () => {
-        setIsLoad(true)
+    const loadData = async () => {
+        setIsLoad(false)
+
+
+        const response = await fetch(`${url}/ecole`)
+        const data = await response.json()
         data.map(item => {
-            if(item.value == currentUser.id_ecole) setEcole(item)
+            if(item.idEcole == currentUser.id_ecole) setEcole(item)
         })
+        setListeEcole(data)
+        setIsLoad(true)
 
 
 
@@ -145,9 +148,9 @@ export default function EditAdminScreen({navigation}) {
                     <Text style={styles.text}>Modifier le compte</Text>
                     <Input mdp={null} text={'Nom'} placeholder={"Dupont"} value={name} setValue={handleChangeName} errorMessage={showErreurNom ? 'Champ manquant' : null}/>
                     <Input mdp={null} text={'Prénom'} placeholder={"Etienne"} value={prename} setValue={handleChangePrenom} errorMessage={showErreurPrenom ? 'Champ manquant' : null}/>
-                    <DropDown type={"Ecole"} data={data} value={ecole} setValue={handleChangeEcole} labelField={'label'} valueField={'value'} placeholder={'Ecole primaire imaginaire'} errorMessage={showErreurEcole ? "Champ manquant" : null}/>
+                    {isLoad ? <DropDown type={"Ecole"} data={listeEcole} value={ecole} setValue={handleChangeEcole} labelField={'nom'} valueField={'idEcole'} placeholder={'Ecole primaire imaginaire'} errorMessage={showErreurEcole ? "Champ manquant" : null}/> : null}
                     <CustomButton disable={!(name != null && prename != null && ecole != null)} color={"#94265B"} text={"Confirmer les modifications"} textColor={"#fff"} width={"80%"} action={handleEditAdmin}/>
-                    {!wantDelete ? <CustomButton disable={!(name != null && prename != null && ecole != null)} color={"#94265B"} text={"Supprimer le compte"} textColor={"#fff"} width={"80%"} action={() => setWantDelete(true)} /> : null}
+                    {!wantDelete ? <CustomButton color={"#94265B"} text={"Supprimer le compte"} textColor={"#fff"} width={"80%"} action={() => setWantDelete(true)} /> : null}
                     {wantDelete ?
                         <View style={{alignItems : 'center', width : "100%"}}>
                             <Text style={{color : '#f00', fontSize : 13,  fontWeight : '500', marginBottom : 15}}>Etes-vous sur de vouloir supprimer votre compte ? </Text>
