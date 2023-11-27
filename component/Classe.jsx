@@ -4,7 +4,7 @@ import { GlobalStateContext } from "../global";
 
 const ClasseSource = "../assets/Admin/classe.png"
 
-export default function Classe({navigation, name, nb}) {
+export default function Classe({navigation, name, nb, item}) {
 
     const {currentClasse, setCurrentClasse} = useContext(GlobalStateContext)
 
@@ -23,7 +23,7 @@ export default function Classe({navigation, name, nb}) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} onLayout={console.log(item)}>
             <Image style={styles.image} source={require(ClasseSource)}/>
             <Text style={{color : "#fff",fontWeight : '400', fontSize : 21}}>{name}</Text>
             <Text style={{color : "#fff",fontWeight : '300', fontSize : 13}}>{`${nb} elèves`}</Text>

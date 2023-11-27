@@ -877,7 +877,7 @@ export default function EcolesScreen({navigation}) {
             
             {
                 isLoad ? 
-                listeEcolesFiltre.map((ecole, index) => <EcoleButton navigation={navigation} nom={ecole.nom} ville={ecole.ville} key={index} num={[ecole.idEcole, index]}/>) :
+                listeEcolesFiltre.map((ecole, index) => <EcoleButton navigation={navigation} nom={ecole.nom} ville={ecole.ville} key={index} num={[ecole, index]}/>) :
                 null
             }
             

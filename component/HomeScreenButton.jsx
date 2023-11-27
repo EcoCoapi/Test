@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, Text, Pressable } from "react-native";
+import { StyleSheet, View, Image, Text, Pressable, TouchableOpacity } from "react-native";
 
 const DocSource = '../assets/HomeScreen/Document.png'
 const EcoleSource = '../assets/HomeScreen/Ecole.png'
@@ -49,10 +49,10 @@ export default function HomeScreenButton({type, cote, action}) {
 
     }
     return (
-        <Pressable style={[styles.container, {backgroundColor : `${color}`, marginLeft : cote === 0 ? 0 : 50, marginRight : cote === 0 ? 50 : 0}]} onPress={action} onLayout={load}>
+        <TouchableOpacity style={[styles.container, {backgroundColor : `${color}`, marginLeft : cote === 0 ? 0 : 50, marginRight : cote === 0 ? 50 : 0}]} onPress={action} onLayout={load}>
                 {cote === 0 ? <Image  style={[styles.image, {flex : 1}]} source={source}/> : <Text style={[styles.text, {flex : 2}]}>{text}</Text>}
                 {cote === 0 ? <Text style={[styles.text, {flex : 2}]}>{text}</Text> : <Image  style={[styles.image, {flex : 1}]} source={source}/>}
-        </Pressable>
+        </TouchableOpacity>
 
     )
 }

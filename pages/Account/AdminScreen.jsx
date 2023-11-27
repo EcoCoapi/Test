@@ -7,6 +7,7 @@ import { GlobalStateContext } from '../../global'
 import Classe from '../../component/Classe'
 import CustomButton from '../../component/CustomButton'
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios'
 
 
 const ProfileSource = "../../assets/Admin/profil.png"
@@ -20,6 +21,8 @@ export default function AdminScreen({navigation}) {
 
     const [ecole, setEcole] = useState(null)
     const [isLoad, setIsLoad] = useState(null)
+
+    const [listeClasse, setListeClasse] = useState([])
 
     const [profilePicture, setProfilePicture] = useState(null)
 
@@ -72,6 +75,16 @@ export default function AdminScreen({navigation}) {
         setIsLoad(false)
         const response = await fetch(`${url}/ecole/${currentUser.id_ecole}`)
         const data = await response.json()
+
+        await axios.post(`${url}/classe/prof`, {mail : currentUser.mail})
+        .then(response => {
+            setListeClasse(response.data)
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
         setEcole(data[0].nom)
         setIsLoad(true)
 
@@ -87,9 +100,8 @@ export default function AdminScreen({navigation}) {
           })
         if (!_image.cancelled) {
             console.log("oui")
-            setProfilePicture(_image.uri)
-            console.log(_image.uri)
-            console.log(JSON.stringify(_image))
+            setProfilePicture(_image.assets[0].uri)
+
         }
   
 
@@ -112,21 +124,24 @@ export default function AdminScreen({navigation}) {
             </View>
 
                 <View style={styles.container}>
-                    <TouchableOpacity onPress={addProfilePicture}>
-                        <Image style={styles.profile}  source={{uri : profilePicture}}/>
+                    <TouchableOpacity  onPress={addProfilePicture}>
+                        <Image style={styles.profile}  source={profilePicture ? {uri : profilePicture} : require(ProfileSource)}/>
                     </TouchableOpacity>
                     
                     <Text style={styles.text}>{`${currentUser.nom} ${currentUser.prenom}`}</Text>
                     {isLoad ? <Text style={styles.text}>{`${ecole}`}</Text> : null}
+                    {listeClasse.length !== 0 ? 
                     <FlatList
-                        style={{padding : "2%"}}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={data}
-                        renderItem={({item}) =>
-                            <Classe name={item.nom} nb={item.nb}/>
-                            }
-                    />
+                            style={{padding : "2%" }}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={isLoad ? listeClasse : null}
+                            renderItem={({item}) =>
+                                <Classe item={item} name={item.niveau} nb={item.nbEleves}/>
+                                }
+                        />: 
+                        <Text style={{textAlign : 'center', fontSize : 15, fontWeight : 'bold', padding : "10%", color : '#e00'}}>Vous n'avez pas encore de classe</Text>}
+                    
                     <View style={{display : 'flex', flexDirection : 'row'}}>
                         <View style={styles.containerClasse}>
                             <Image style={styles.image} source={require(CoeurSource)}/>
@@ -176,7 +191,7 @@ const styles = StyleSheet.create({
         height : 140,
         borderRadius : 170/2,
         borderColor : '#3D1E7B',
-        borderWidth : 8,  
+        borderWidth : 8, 
 
     },
     

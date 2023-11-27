@@ -519,6 +519,14 @@ export const GlobalStateProvider = ({ children }) => {
         {'value' : 2 , 'label' : 'Péri-Urbaine'},
         {'value' : 3 , 'label' : 'Rurale'}
     ]
+
+    const listeNiveau = [
+      {'value' : 1, "label" : 'CP'},
+      {'value' : 2, "label" : 'CE1'},
+      {'value' : 3, "label" : 'CE2'},
+      {'value' : 4, "label" : 'CM1'},
+      {'value' : 5, "label" : 'CM2'},
+    ]
     const [currentDoc, setCurrentDoc] = useState(null)
     const [currentEcole, setCurrentEcole] = useState(null)
     const [currentClasse, setCurrentClasse] = useState(null)
@@ -549,7 +557,7 @@ export const GlobalStateProvider = ({ children }) => {
                     isAdmin , setIsAdmin, 
                     currentUser, setCurrentUser,
                     url, saltHash, 
-                    LISTE_DEPT, listeType
+                    LISTE_DEPT, listeType, listeNiveau
                 }
             }
         >

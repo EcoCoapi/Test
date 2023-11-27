@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Pressable, StyleSheet, View , Image, Text} from "react-native";
+import { Pressable, StyleSheet, View , Image, Text, TouchableOpacity} from "react-native";
 import { GlobalStateContext } from "../global";
 
 
@@ -52,7 +52,7 @@ export default function EcoleButton({navigation, nom, ville, num}) {
 
     return (
 
-        <Pressable style={styles.container} onPress={handleGoEcole} onLayout={load}>
+        <TouchableOpacity style={styles.container} onPress={handleGoEcole} onLayout={load}>
             <Image style={styles.image} source={source}/>
             <View style={{display : 'flex', flexDirection :'column', height : '100%', marginTop : "8%"}}>
                 <Text style={styles.text1}>{nom}</Text>
@@ -60,7 +60,7 @@ export default function EcoleButton({navigation, nom, ville, num}) {
 
             </View>
             
-        </Pressable>
+        </TouchableOpacity>
     )
 
 }
