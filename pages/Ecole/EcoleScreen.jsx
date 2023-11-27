@@ -112,7 +112,7 @@ export default function EcoleScreen({navigation}) {
                             showsHorizontalScrollIndicator={false}
                             data={isLoad ? listeClasse : null}
                             renderItem={({item}) =>
-                                <Classe item={item} name={item.niveau} nb={item.nbEleves}/>
+                                <Classe item={item} name={item.niveau} nb={item.nbEleves} navigation={navigation}/>
                                 }
                         />: 
                         <Text style={{textAlign : 'center', fontSize : 15, fontWeight : 'bold', padding : "10%", color : '#e00'}}>Aucune classe dans cette école</Text>}

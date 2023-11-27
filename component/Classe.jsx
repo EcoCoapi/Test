@@ -1,33 +1,32 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Pressable, Image, StyleSheet } from "react-native";
+import { View, Text, Pressable, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { GlobalStateContext } from "../global";
 
 const ClasseSource = "../assets/Admin/classe.png"
 
-export default function Classe({navigation, name, nb, item}) {
+export default function Classe({navigation, name, nb, item, disable}) {
 
     const {currentClasse, setCurrentClasse} = useContext(GlobalStateContext)
 
     
-    const [id, setId] = useState(null);
-    const [nom, setNom] = useState(name);
-    const [niveau, setNiveau] = useState(null)
-    const [nbEleve, setNbEleve] = useState(null)
-    const [mailProf, setMalProf] = useState(null)
-    const [idChall, setIdChall] = useState(null)
+    const [id, setId] = useState(item.idClasse);
+    const [niveau, setNiveau] = useState(item.niveau)
+    const [nbEleve, setNbEleve] = useState(item.nbEleves)
+    const [mailProf, setMalProf] = useState(item.maiProf)
+    const [idChall, setIdChall] = useState(item.idChallenge)
 
 
     const hanldeGoClasse = () => {
-        setCurrentClasse(nom)
+        setCurrentClasse(item)
         navigation.navigate("Classe")
     }
 
     return (
-        <View style={styles.container} onLayout={console.log(item)}>
+        <TouchableOpacity style={styles.container} onPress={hanldeGoClasse} disabled={disable}>
             <Image style={styles.image} source={require(ClasseSource)}/>
-            <Text style={{color : "#fff",fontWeight : '400', fontSize : 21}}>{name}</Text>
-            <Text style={{color : "#fff",fontWeight : '300', fontSize : 13}}>{`${nb} elèves`}</Text>
-        </View>
+            <Text style={{color : "#fff",fontWeight : '400', fontSize : 21}}>{niveau}</Text>
+            <Text style={{color : "#fff",fontWeight : '300', fontSize : 13}}>{`${nbEleve} elèves`}</Text>
+        </TouchableOpacity>
 
 
     )

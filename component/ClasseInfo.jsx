@@ -14,7 +14,7 @@ export default function ClasseInfo({nb, type, navigation}) {
     const [source, setSource] = useState(require(StationSource))
     const [isLoad, setIsLoad] = useState(false)
 
-    const load = () => {
+    const load = async () => {
         setIsLoad(false)
         switch(type){
             case "station" : {

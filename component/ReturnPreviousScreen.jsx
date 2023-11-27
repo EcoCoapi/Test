@@ -24,7 +24,6 @@ export default function ReturnPreviousScreen ({titre, enable, disable}) {
     }
 
     const handleGoAdmin = () => {
-        console.log("hett")
         navigation.navigate("Admin")
     }
 

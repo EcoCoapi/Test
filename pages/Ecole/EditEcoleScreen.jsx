@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View , Text, StyleSheet, TextInput, Button, ScrollView} from "react-native";
+import { View , Text, StyleSheet, TextInput, Button, ScrollView, ActivityIndicator} from "react-native";
 import NavBar from "../../component/NavBar";
 import { Dropdown } from "react-native-element-dropdown";
 import ReturnPreviousScreen from "../../component/ReturnPreviousScreen";
@@ -17,6 +17,8 @@ export default function EditEcoleScreen ({navigation}) {
     const [nom, setNom] = useState(currentEcole.nom)
     const [ville, setVille] = useState(currentEcole.ville)
 
+    const [isWaiting, setIsWaiting] = useState(false)
+
     const [nbBus, setNbBus] = useState(currentEcole.nbBus.toString())
     const [nbVelo, setNbVelo] = useState(currentEcole.nbStationVelo.toString())
     const [nbPiste, setNbPiste] = useState(currentEcole.nbPistecCyclable.toString())
@@ -33,7 +35,6 @@ export default function EditEcoleScreen ({navigation}) {
 
         LISTE_DEPT.map(item => {
             if(item.num_dep == dept) {
-                console.log("sqdfg")
                 region = item.region_name
             }
         })
@@ -42,35 +43,37 @@ export default function EditEcoleScreen ({navigation}) {
     }
 
 
-    const handleCreateEcole = async () => {
-        //Fonction pour ajouter une école dans la BDD
+    const handleEditEcole = async () => {
+        //Fonction pour modifier une école dans la BDD
 
+        setIsWaiting(true)
 
         const body = {
             nom : nom, 
             ville : ville, 
             departement : dept, 
             region : getRegion(), 
-            nbClasse : 0,
-            nbBus : nbBus, 
-            nbPisteCylclable : nbPiste, 
-            nbStationVelo : nbVelo, 
+            nbBus : parseInt(nbBus), 
+            nbPisteCyclable : parseInt(nbPiste), 
+            nbStationVelo : parseInt(nbVelo), 
             type : type
 
 
         }
 
-        await axios.post(`${url}/ecole`, body)
+        console.log(body)
+
+        await axios.put(`${url}/ecole/${currentEcole.idEcole}`, body)
         .then(response => {
             console.log(response.data)
-            navigation.navigate("First")
+            navigation.navigate("Home")
         })
         .catch(error => {
             console.log(error)
         })
 
 
-        
+        setIsWaiting(false)
         
         //navigation.navigate('Home')
     }
@@ -87,7 +90,7 @@ export default function EditEcoleScreen ({navigation}) {
         onLayout={() => console.log(currentEcole)}
 
     >   
-        <ScrollView style={{width : "100%"}}>                
+        {!isWaiting ? <ScrollView style={{width : "100%"}}>                
 
 
 
@@ -109,11 +112,11 @@ export default function EditEcoleScreen ({navigation}) {
                 <Input placeholder={"0"} text={"Nombre de station de vélo"} keyboard="number-pad" mdp={null} value={nbVelo} setValue={setNbVelo} />
                 <Input placeholder={"0"} text={"Nombre de piste cyclable"} keyboard="number-pad" mdp={null} value={nbPiste} setValue={setNbPiste} />
                 <DropDown data={listeType} labelField={'label'} valueField={'value'} placeholder={"Urbaine"} setValue={setType} value={type} type={"Type d'école"}/>
-                <CustomButton disable={!(dept != "" && nom != "" && ville != "" && nbBus != "" && nbPiste != "" && nbVelo != "" && type != "")} color={"#F6973D"} text={"Modifier"} textColor={"#fff"} width={"40%"} action={handleCreateEcole}/>
+                <CustomButton disable={!(dept != "" && nom != "" && ville != "" && nbBus != "" && nbPiste != "" && nbVelo != "" && type != "")} color={"#F6973D"} text={"Modifier"} textColor={"#fff"} width={"40%"} action={handleEditEcole}/>
             </View>
 
   
-        </ScrollView>
+        </ScrollView> : <ActivityIndicator size={'large'}/>}
     </LinearGradient>
 
     )

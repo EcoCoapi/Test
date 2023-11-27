@@ -33,7 +33,7 @@ export default function EditAdminScreen({navigation}) {
 
     const [wantDelete, setWantDelete] = useState(false)
 
-     const[isWaiting, setIsWaiting] = useState(false)
+    const[isWaiting, setIsWaiting] = useState(false)
     const[isLoad, setIsLoad] = useState(false)
 
 
@@ -148,7 +148,7 @@ export default function EditAdminScreen({navigation}) {
                     <Text style={styles.text}>Modifier le compte</Text>
                     <Input mdp={null} text={'Nom'} placeholder={"Dupont"} value={name} setValue={handleChangeName} errorMessage={showErreurNom ? 'Champ manquant' : null}/>
                     <Input mdp={null} text={'Prénom'} placeholder={"Etienne"} value={prename} setValue={handleChangePrenom} errorMessage={showErreurPrenom ? 'Champ manquant' : null}/>
-                    {isLoad ? <DropDown type={"Ecole"} data={listeEcole} value={ecole} setValue={handleChangeEcole} labelField={'nom'} valueField={'idEcole'} placeholder={'Ecole primaire imaginaire'} errorMessage={showErreurEcole ? "Champ manquant" : null}/> : null}
+                    {/*isLoad ? <DropDown type={"Ecole"} data={listeEcole} value={ecole} setValue={handleChangeEcole} labelField={'nom'} valueField={'idEcole'} placeholder={'Ecole primaire imaginaire'} errorMessage={showErreurEcole ? "Champ manquant" : null}/> : null*/}
                     <CustomButton disable={!(name != null && prename != null && ecole != null)} color={"#94265B"} text={"Confirmer les modifications"} textColor={"#fff"} width={"80%"} action={handleEditAdmin}/>
                     {!wantDelete ? <CustomButton color={"#94265B"} text={"Supprimer le compte"} textColor={"#fff"} width={"80%"} action={() => setWantDelete(true)} /> : null}
                     {wantDelete ?

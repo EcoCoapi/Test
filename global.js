@@ -5,14 +5,14 @@ export const GlobalStateContext = createContext()
 export const GlobalStateProvider = ({ children }) => {
 
     const [currentUser, setCurrentUser] = useState(
-        {
-            id_classe: "1", 
-            id_ecole: 9,
-            mail: "victorbats33@gmail.com ", 
-            motDePasse: "$2a$10$CwTycUXWue0Thq9StjUM0uvh7vUcPsHz7l/r..f6G6r8zGbmzGrVS", 
-            nom: "Dupont", 
-            prenom: "Etienne"
-        })
+      {
+        id_classe: "1", 
+        id_ecole: 9,
+        mail: "victorbats33@gmail.com ", 
+        motDePasse: "$2a$10$CwTycUXWue0Thq9StjUM0uvh7vUcPsHz7l/r..f6G6r8zGbmzGrVS", 
+        nom: "Dupont", 
+        prenom: "Etienne"
+    })
 
     //num_dep ; dep_name ; region_name
     const LISTE_DEPT = [

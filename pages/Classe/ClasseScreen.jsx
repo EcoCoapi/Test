@@ -1,15 +1,19 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Button, Pressable, Image } from "react-native";
+import { View, Text, StyleSheet, Button, Pressable, Image, FlatList } from "react-native";
 import NavBar from "../../component/NavBar";
 import ReturnPreviousScreen from "../../component/ReturnPreviousScreen";
 import { GlobalStateContext } from "../../global";
 import Classe from "../../component/Classe";
 import Challenge from "../../component/Challenge";
 import { ScrollView } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import CustomButton from "../../component/CustomButton";
+import axios from "axios";
+import ChallengeClasse from "../../component/ChallengeClasse";
 
 export default function ClasseScreen({navigation}) {
 
-    const {currentClasse, isAdmin} = useContext(GlobalStateContext)
+    const {currentClasse, isAdmin, url} = useContext(GlobalStateContext)
 
     const[isLoad, setIsLoad] = useState(false)
     const[listeChall, setListChall] = useState([])
@@ -18,16 +22,31 @@ export default function ClasseScreen({navigation}) {
     const handleGoEdit = () => {
         navigation.navigate("Edit-Classe")
     }
-    const loadData = () => {
+    const loadData = async () => {
         setIsLoad(false)
 
         const newList = listeChall
-        for (let index = 1; index < 10; index++) {
-            newList.push(<Challenge key={index} navigation={navigation} name={`Challenge ${index}`} viewChall={false}/>)
-            
-        }
+
+        const l = currentClasse.idChallenge.slice(0, -1).split("|")
+
+        const request = await Promise.all(l?.map((id) => {
+            return axios.get(`${url}/challenges/${id}`)
+
+
+        }))
+
+        request.map(item => newList.push(item.data[0]))
+        console.log(newList)
         setListChall(newList)
+
         setIsLoad(true)
+    }
+
+    const fetchChall = async (id) => {
+
+
+        return await data
+
     }
 
     const hanldeGoAddChallenge = () => {
@@ -40,53 +59,119 @@ export default function ClasseScreen({navigation}) {
     }
 
     return (
-        <View onLayout={loadData}>
-            <NavBar navigation={navigation} screenName={"Classe Screen"}/>
+        
+        <LinearGradient
+            colors={['#5DE0E6', '#004AAD']} 
+            style={styles.gradient}
+            start={{x : 0, y:0.5}}
+            end={{x:1, y:0.5}}
+            locations={[0.1, 0.9]}
+            onLayout={loadData}
+
+
+        >
+
+            <View style={styles.navbar}>
+                <ReturnPreviousScreen enable titre={'Classe'} />
+            </View>
+            <Classe item={currentClasse} disable/>
             <View style={styles.container}>
-                {isAdmin ? <Button title="Modifier les informations de la classe" onPress={handleGoEdit}/> : null}
-                <Text style={styles.text}>{currentClasse}</Text>
-                <View style={styles.container2}>
-                    <Text styles={styles.text2}>Challenge ECO-ECO</Text>
-                    <Pressable onPress={handleGoChallengeEco}>
-                        <Image style={styles.image} source={require('../../assets/rightArrow.png')}/>
-                    </Pressable>
-                </View>
-                <ScrollView style={{backgroundColor : "#fff", width : "100%"}}>
-                    {isLoad ? listeChall.map(chall => chall) : null}
-                </ScrollView>
-                {isAdmin ? <Button title={"Ajouter une challenge"} onPress={hanldeGoAddChallenge}/>: null}
+                {isLoad ? 
+                <FlatList
+                    style={{padding : "2%" }}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={isLoad ? listeChall : null}
+                    renderItem={({item}) => {
+                        <Classe item={item} name={item.nom} nb={0}/>
+                        }}
+                />
+                :
+                null
+                }
+            </View>
+
+
+        </LinearGradient>
+        
+
+        /*
+        <View>
+            <NavBar navigation={navigation} screenName={'Add-Classe Screen'}/>
+            <View style={styles.container}>
+                <Text style={styles.text}>Création d'une classe</Text>
+                <TextInput style={styles.textInput} placeholder="Nom" />
+                <TextInput style={styles.textInput} placeholder="Niveau" />
+                <TextInput style={styles.textInput} placeholder="Nombre d'élève" />
+                <Button onPress={handleCreateClasse} title="Créer la classe"/>
                 <ReturnPreviousScreen navigation={navigation}/>
             </View>
         </View>
-
+        */
     )
-
-
-
 }
-
 const styles = StyleSheet.create({
-
-    container : {
-        paddingTop : 0,
-        height : "92%",
-        display : 'flex', 
-        flexDirection : 'column',
-        alignItems : 'center', 
-        justifyContent : 'center',
-        alignSelf : 'center', 
-        width : "100%",
-        backgroundColor : "#e0f5ae",
-        gap : 50,
-        padding : 10
-    }, 
-    container2 : {
-        display : 'flex',
-        flexDirection : 'row', 
+    containerClasse : {
+        flex : 1, 
+        backgroundColor : "#737373", 
+        marginHorizontal: 30,
+        padding : 10, 
         alignItems : 'center',
-        backgroundColor : "#7649E8"
+        opacity : 0.7,
+        borderWidth : 2, 
+        borderStyle : "solid", 
+        borderRadius : 5, 
+        marginBottom : "3%"
+    },
+    text2 : {
+        color : "#fff",
+        fontWeight : '400',
+        fontSize : 21, 
+        textAlign : 'center'
+    }, 
+    image : {
+        
+        width : 70,
+        height : 70
+    },
+
+
+    profile : {
+        width : 140, 
+        height : 140,
+        borderRadius : 170/2,
+        borderColor : '#3D1E7B',
+        borderWidth : 8, 
 
     },
+    
+    gradient : {
+        paddingTop : '3%',
+        alignItems : 'center',
+        width : "100%", 
+        height : "100%", 
+        gap : 15,
+        alignItems : 'center' 
+    }, 
+    navbar : {
+        top : 0,
+        display : "flex", 
+        flexDirection : 'row', 
+        alignItems : 'center',
+        height : '10%',
+        margin : '2%'
+    }, 
+    container : {
+        flex : 1, 
+        borderWidth : 1, 
+        borderStyle : "solid",
+        padding : "2%",
+        width : "85%",
+        display : 'flex', 
+        flexDirection : 'column',
+        alignItems : 'center',
+        gap : 8
+    }, 
     textInput : {
         borderStyle : 'solid',
         borderWidth : 1, 
@@ -96,16 +181,10 @@ const styles = StyleSheet.create({
         textAlign : 'center'
     }, 
     text :{
+
         fontWeight : 'bold',
         fontSize : 20,
-    }, 
-    text2 :{
-        fontWeight : 'bold',
-        fontSize : 30,
-    }, 
-    image : {
-        
-        width : 30,
-        height : 30
+        color : "#fff", 
+        opacity : 0.8
     }
 })

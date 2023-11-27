@@ -21,6 +21,7 @@ export default function EditClasseScreen({navigation}) {
     }
 
     return (
+        
         <View>
             <NavBar navigation={navigation} screenName={'Edit-Classe Screen'}/>
             <View style={styles.container}>
