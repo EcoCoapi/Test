@@ -83,7 +83,7 @@ export default function EcoleScreen({navigation}) {
              </LinearGradient>
             {
                 verifCompteEcole() ? 
-                <View style={{alignItems : 'center' , display : 'flex', flexDirection : 'row', justifyContent : 'space-around'}}>
+                <View style={styles.container_button_edit_ecole}>
                     <Text style={{ textAlignVertical : 'center', alignSelf :'center', borderWidth : 2, borderRadius : 15,  width : 100, fontSize : 15, fontWeight : "300", textAlign : 'center', padding : "2%", backgroundColor : '#D9D9D9'}}>Votre école</Text>
                     <CustomButton width={"40%"} color={"#3D1E7B"} text={"Modifier l'école"} textColor={'#fff'} action={handleGoEdit}/>
                 
@@ -147,6 +147,13 @@ export default function EcoleScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
+
+    container_button_edit_ecole : {
+        alignItems : 'center' , 
+        display : 'flex', 
+        flexDirection : 'row', 
+        justifyContent : 'space-around'
+    }, 
 
     container2 : {
         alignSelf : 'center',

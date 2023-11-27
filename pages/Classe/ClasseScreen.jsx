@@ -78,7 +78,7 @@ export default function ClasseScreen({navigation}) {
             <View style={styles.container}>
                 {isLoad ? 
                 <FlatList
-                    style={{padding : "2%" }}
+                    style={{padding : "2%"}}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={isLoad ? listeChall : null}
