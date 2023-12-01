@@ -51,7 +51,7 @@ export default function GroupeclasseScreen({navigation}){
         const response = await fetch(`${url}/groupe`)
         const data = await response.json()
 
-        if(isAdmin) {
+        if(isAdmin && currentClasse.mailProf == currentUser.mail) {
             !isLoad ? setListGroupe(data) : null
             setLiseGroupeOg(data)
 
@@ -322,8 +322,8 @@ export default function GroupeclasseScreen({navigation}){
                     }
                     {!isFiltreHide ? 
                     <View style={{display : 'flex', flexDirection : 'row', alignItems : 'center', gap : 50}}>
-                        {isAdmin ? <SwitchText value={myGroupeFiltre} setValue={setMyGroupeFiltre} titre={"Mes groupes"}/> : null}
-                        {isAdmin ?<SwitchText value={priveFiltre} setValue={setPriveFiltre} titre={"Privé"}/> : null} 
+                        {(isAdmin ? currentClasse.mailProf == currentUser.mail : false) ? <SwitchText value={myGroupeFiltre} setValue={setMyGroupeFiltre} titre={"Mes groupes"}/> : null}
+                        {(isAdmin ? currentClasse.mailProf == currentUser.mail : false) ?<SwitchText value={priveFiltre} setValue={setPriveFiltre} titre={"Privé"}/> : null} 
                     </View>
                     
                     : null}
@@ -335,7 +335,7 @@ export default function GroupeclasseScreen({navigation}){
                         : 
                         <ImageButton source={require('../../assets/annuler.png')} bgColor="#F4F4F4" action={() => setWantJoinGroupe(false)}/>
                         }
-                        {isAdmin && !isFiltreHide ? <ImageButton source={require('../../assets/plus.png')} bgColor="#F4F4F4" action={handleAddGroupe}/>:
+                        {(isAdmin ? currentClasse.mailProf == currentUser.mail : false) && !isFiltreHide ? <ImageButton source={require('../../assets/plus.png')} bgColor="#F4F4F4" action={handleAddGroupe}/>:
                     null
                     }
                     </View> 

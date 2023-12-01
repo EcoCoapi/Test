@@ -8,7 +8,7 @@ const color1 = "#721E49"
 const color2 = "#913275"
 const color3 = "#CE5888"
 
-export default function ClasseChallengeEco ({navigation, item, disable, ecole, position}) {
+export default function ClasseChallengeEco ({navigation, item, disable, ecole, position, action}) {
 
     const {currentClasse, setCurrentClasse, url} = useContext(GlobalStateContext)
 
@@ -49,7 +49,7 @@ export default function ClasseChallengeEco ({navigation, item, disable, ecole, p
     }
 
     return (
-        <TouchableOpacity style={[styles.container, {backgroundColor : getColor(position)}]} disabled onLayout={getEcole}>
+        <TouchableOpacity style={[styles.container, {backgroundColor : getColor(position)}]} onLayout={getEcole} onPress={action}>
             
             <Text style={{flex : 1, color : "#303D36",fontWeight : 'bold', fontSize : 15, textAlignVertical : 'center', textAlign : 'center', backgroundColor : "#6CE5E8", borderWidth : 2, borderRadius : 15, borderStyle : 'solid', paddingHorizontal : 5, paddingVertical : 0,   borderColor : "#fff"}}>{position + 1}</Text>
             <Text style={{flex : 1, color : "#fff",fontWeight : '400', fontSize : 9, textAlignVertical : 'center', textAlign : 'center', backgroundColor : "#000", borderWidth : 2, borderRadius : 5, borderStyle : 'solid', padding : 3, borderColor : "#fff"}}>{niveau}</Text>

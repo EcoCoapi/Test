@@ -2,22 +2,11 @@ import React, { useContext, useState } from "react";
 import { View, Text, Pressable, Image, StyleSheet } from "react-native";
 import { GlobalStateContext } from "../global";
 
-export default function SeanceEco({navigation, name}) {
+export default function SeanceEco({navigation, item}) {
 
 
     const {currentSeanceEco, setCurrentSeanceEco} = useContext(GlobalStateContext)
-    const [nom, setNom] = useState(name)
 
-    const [id, setId] = useState(null)
-    const [idEco, setIdEco] = useState(null)
-    const [date, setDate] = useState(null)
-    const [nbVelo, setNbVelo] = useState(null)
-    const [nbBus, setNbBus] = useState(null)
-    const [nbPied, setNbPied] = useState(null)
-    const [nbTrot, setNbTrot] = useState(null)
-    const [nbVoiture, setNbVoiture] = useState(null)
-    const [nbCovoit, setNbCovoit] = useState(null)
-    const [points, setPoints] = useState(null)
 
     const handleGoSeanceEco = () => {
         setCurrentSeanceEco(nom)
@@ -26,10 +15,16 @@ export default function SeanceEco({navigation, name}) {
 
     return (
         <View style={styles.container}>
-            <Text styles={styles.text}>{nom}</Text>
-            <Pressable onPress={handleGoSeanceEco}>
-                <Image style={styles.image} source={require('../assets/rightArrow.png')}/>
-            </Pressable>
+            <Text style={{flex : 10, fontWeight : 'bold'}}>{item.points}</Text>
+            <Text style={styles.text}>{item.date.split("T")[0].replace("-", "/").replace("-", "/")}</Text>
+            <View style={{flex: 65, alignItems : 'center', justifyContent : 'center', flexDirection : 'row'}}>
+                <Text style={styles.eco}>{item.nbVelo}</Text>
+                <Text style={styles.eco}>{item.nbTC}</Text>
+                <Text style={styles.eco}>{item.nbVoiture}</Text>
+                <Text style={styles.eco}>{item.nbCoVoiture}</Text>
+                <Text style={styles.eco}>{item.nbTrot}</Text>
+                <Text style={styles.eco}>{item.nbPieton}</Text>
+            </View>
         </View>
 
 
@@ -38,19 +33,30 @@ export default function SeanceEco({navigation, name}) {
 }
 
 const styles = StyleSheet.create({
-
+    eco : {
+        marginHorizontal : "2%", backgroundColor : "#6CE5E8", color : "#004F7C", borderRadius : 5, 
+        flex : 1, textAlign : 'center', textAlignVertical : 'center'
+    },
     container : {
-        display : 'flex', 
         flexDirection : 'row',
         alignItems : 'center',
         justifyContent: 'space-between',
-        paddingTop : 30,
-        paddingLeft : 10,
+        backgroundColor : "#E1EDC7", 
+        padding : "1.5%",
+        paddingVertical : "2%",
+        gap : 2, 
+        marginVertical : "1%",
+        borderRadius : 10, 
+        borderWidth : 1, 
+        borderStyle : 'solid'
+
     
     },
     text : {
-        fontWeight : 'bold',
-        fontSize : 18
+        flex : 25,
+        fontWeight : '300',
+        textAlign : 'center',
+        fontSize : 14,
     }, 
     image : {
         

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, StyleSheet , Text, Button} from "react-native";
 import NavBar from "../../component/NavBar";
 import ReturnPreviousScreen from "../../component/ReturnPreviousScreen";
@@ -9,10 +9,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import CustomButton from "../../component/CustomButton";
 import CompteurEco from './../../component/CompteurEco';
 import Input from "../../component/Input";
+import axios from "axios";
+import { GlobalStateContext } from "../../global";
 
 const currentDate = new Date().toISOString()
 
 export default function AddSeanceEcoScreen ({navigation}) {
+
+    const {currentClasse, currentGroupeChallengeEco, url} = useContext(GlobalStateContext)
     
     const [date, setDate] = useState(null)
     const [nbVelo, setNbVelo] = useState(0)
@@ -35,9 +39,33 @@ export default function AddSeanceEcoScreen ({navigation}) {
 
     }
 
-    const handleAddSeanceEco = () => {
+    const handleAddSeanceEco = async () => {
         //Fonction pour ajoiter uen séance Eco à la BDD
-        verifInfo()
+        if(verifInfo()){
+            console.log("oui")
+            const body = {
+                date : date,
+                idGroupe : currentGroupeChallengeEco.idGroupe,
+                idClasse : currentClasse.idClasse,
+                nbVelo : nbVelo,
+                nbTc : nbBus ,
+                nbPieton : nbPieton,
+                nbVoiture : nbVoiture,
+                nbCoVoiture : nbCovoit,
+                nbTrot : nbTrot,
+                points : nbPoint
+            }
+
+            await axios.post(`${url}/seance/eco/add`, body)
+            .then(result => {
+                console.log(result.data)
+                navigation.navigate("Groupe-Challenge-Eco")
+            })
+            .catch(error => {
+                console.log(error)
+            })
+
+        }
         
     }
 
@@ -51,13 +79,16 @@ export default function AddSeanceEcoScreen ({navigation}) {
             if(!nbPoint && !date) setErrorMessage("Date et nombre de points")
             else if (!nbPoint) setErrorMessage("Nombre de points")
             else if(!date) setErrorMessage("Date")
+            return false
         }
 
 
     }
 
     const handleSelectDate = (d) => {
-        setDate(d)
+        setDate(d.replace("/", "-").replace('/', '-'))
+        
+        
 
     }
 

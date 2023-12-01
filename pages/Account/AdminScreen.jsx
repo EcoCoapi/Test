@@ -17,7 +17,7 @@ const MessageSource = "../../assets/Admin/discuter.png"
 
 export default function AdminScreen({navigation}) {
 
-    const {currentUser, currentClasse, currentEcole, currentGroupeChallengeEco, url} = useContext(GlobalStateContext)
+    const {currentUser, currentClasse, currentEcole, currentGroupeChallengeEco, url, isAdmin} = useContext(GlobalStateContext)
 
     const [ecole, setEcole] = useState(null)
     const [isLoad, setIsLoad] = useState(null)
@@ -26,28 +26,7 @@ export default function AdminScreen({navigation}) {
 
     const [profilePicture, setProfilePicture] = useState(null)
 
-    const data = [
-        {
-            nom : "CE2 A", 
-            nb : 25
-        },
-        {
-            nom : "CE2 B", 
-            nb : 38
-        },
-        {
-            nom : "CE2 C", 
-            nb : 38
-        },
-        {
-            nom : "CE2 D", 
-            nb : 38
-        },
-        {
-            nom : "CE2 E", 
-            nb : 38
-        },
-    ]
+
 
     const handleEditAdmin = () => {
         navigation.navigate('Home')
@@ -109,6 +88,7 @@ export default function AdminScreen({navigation}) {
 
     const showGlobal = () => {
 
+        console.log(currentClasse.mailProf == currentUser.mail)
         console.log(currentUser)
         console.log(currentEcole)
         console.log(currentClasse)
@@ -147,7 +127,7 @@ export default function AdminScreen({navigation}) {
                             showsHorizontalScrollIndicator={false}
                             data={isLoad ? listeClasse : null}
                             renderItem={({item}) =>
-                                <Classe item={item} name={item.niveau} nb={item.nbEleves}/>
+                                <Classe item={item} navigation={navigation}/>
                                 }
                         />: 
                         <Text style={{textAlign : 'center', fontSize : 15, fontWeight : 'bold', padding : "10%", color : '#e00'}}>Vous n'avez pas encore de classe</Text>}

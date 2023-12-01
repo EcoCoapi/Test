@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, Button, FlatList } from "react-native";
+import { View, StyleSheet, Text, ScrollView, Button, FlatList, Image } from "react-native";
 import NavBar from "../../component/NavBar";
 import ReturnPreviousScreen from "../../component/ReturnPreviousScreen";
 import Groupe from "../../component/Groupe";
@@ -14,10 +14,10 @@ import ImageButton from "../../component/ImageButon";
 export default function GroupeChallengeEcoScreen({navigation}) {
 
 
-    const {currentGroupeChallengeEco, isAdmin, url, currentUser} = useContext(GlobalStateContext)
+    const {currentGroupeChallengeEco, isAdmin, url, currentUser, currentClasse, setCurrentClasse} = useContext(GlobalStateContext)
 
 
-    const [listeSeanceEco, setListeSeanceEco] = useState([1,2,3,4,5,6,7,7,1,2,3,4,5,6,7,7])
+    const [listeSeanceEco, setListeSeanceEco] = useState([])
     const [listClasse, setListeClasse] = useState( [])
 
     const[isLoad, setIsLoad] = useState(false)
@@ -36,18 +36,37 @@ export default function GroupeChallengeEcoScreen({navigation}) {
         setIsLoad(false)
         const newList = []
         const l = currentGroupeChallengeEco.listeClasse.slice(0, -1).split("|") 
-        console.log(l)
 
         const request = await Promise.all(l?.map((id) => {
             return axios.get(`${url}/classe/${id}`)
 
         }))
         request.map(item => newList.push(item.data[0]))
-        console.log(newList)
         setListeClasse(newList)
+
+        const response = await fetch(`${url}/seance/eco/${currentGroupeChallengeEco.idGroupe}/${currentClasse.idClasse}`)
+        const data = await response.json()
+        setListeSeanceEco(data)
+
+
+
+        
 
         setIsLoad(true)
     }
+    const generateColor = () => {
+        const randomColor = Math.floor(Math.random() * 16777215)
+          .toString(16)
+          .padStart(6, '0');
+        return `#${randomColor}`;
+      }
+
+      const changeClasse = async (item) => {
+        setCurrentClasse(item)
+        const response = await fetch(`${url}/seance/eco/${currentGroupeChallengeEco.idGroupe}/${item.idClasse}`)
+        const data = await response.json()
+        setListeSeanceEco(data)
+      }
 
     
 
@@ -61,44 +80,79 @@ export default function GroupeChallengeEcoScreen({navigation}) {
             locations={[0.1, 0.8]}
 
         >
-            <View style={styles.navbar} onLayout={!isLoad ? loadData : null}>
+            <View style={styles.navbar} onLayout={loadData}>
                 <ReturnPreviousScreen enable titre={'Eco Groupe'} differentWay={() => navigation.navigate("Classe")}/>
             </View>
 
-            <View style={{display : "flex", flexDirection : 'column', width : "95%", alignItems : 'center', flexGrow : 1}}>
-                <Text style={{flex : 1 , borderWidth : 2, borderStyle : "solid", borderRadius : 10, textAlignVertical : 'center', textAlign : 'center', marginHorizontal : "3%",  padding :"3%", fontWeight : "400", fontSize : 24, color : '#FDFDFD', backgroundColor : currentGroupeChallengeEco.isPublic === 0 ? "#FAC172" : "#00BF63"}}>{currentGroupeChallengeEco.nom}</Text>
+            <View style={{gap : 2, display : "flex", flexDirection : 'column', width : "100%", alignItems : 'center', flexGrow : 1, padding : "1%"}}>
+                <Text style={{flex : 5 , borderWidth : 2, borderStyle : "solid", borderRadius : 10, textAlignVertical : 'center', textAlign : 'center', marginHorizontal : "3%",  padding :"3%", fontWeight : "400", fontSize : 24, color : '#FDFDFD', backgroundColor : currentGroupeChallengeEco.isPublic === 0 ? "#FAC172" : "#00BF63"}}>{currentGroupeChallengeEco.nom}</Text>
                 
-                
-                <View style={{flex : 9, width : "100%", display : 'flex', flexDirection : 'column', gap : 15, padding : "2%", justifyContent : 'space-around'}}>
-                    <View style={{flexShrink : 0.3, flexBasis : "auto", overflow : 'hidden', flexGrow : 0,}}>
-                        <Text style={{textAlign : 'center', fontWeight : "300", fontSize : 15}} >Classement des classes du groupe</Text>
-                        <FlatList
-                            style={{ gap : 2}}
-                            data={isLoad ? listClasse : null}
-                            renderItem={(item) => {
-                                //Il faut rajouter la fonction de calcul du classement
-                                return  <ClasseChallengeEco item={item.item} position={(item.index)}/>
-                        
-                            }}
-                        
-                        />
-                    </View>
-                    <View style={{flexShrink : 0.3, flexBasis : "auto", flexGrow : 0.6}}>
-                        <Text style={{ textAlign : 'center', fontWeight : "300", fontSize : 15}} >Séance de ma classe</Text>
-                        <FlatList
-                            style={{   backgroundColor : '#fff'}}
-                            data={isLoad ? listeSeanceEco : null}
-                            renderItem={(item) => {
-                                return  <Text>Heyy</Text>
-                        
-                            }}
-                        
-                        />
-                    </View>
-                    {isAdmin ?<View style={{flexBasis : 'auto', display : "flex", flexDirection : 'row', justifyContent : 'center'}}>
-                            <ImageButton source={require('../../assets/plus.png')} bgColor={"#94265B"} action={handleGoAddSeanceEco}/>
-                    </View> : null}
+            
+
+                <View style={{flex : 20, flexDirection : 'column', width : "100%", padding : "2%"}}>
+                    <Text style={{ textAlign : 'center', fontWeight : "300", fontSize : 15}} >Classement des classes du groupe</Text>
+                    <FlatList
+                        style={{ flex: 100, gap : 2}}
+                        data={isLoad ? listClasse : null}
+                        renderItem={(item) => {
+                            //Il faut rajouter la fonction de calcul du classement
+                            return  <ClasseChallengeEco item={item.item} position={(item.index)} action={() => changeClasse(item.item)}/>
+                    
+                        }}
+                    
+                    />
                 </View>
+
+                <View style={{flex: 30, padding : "2%", flexDirection : 'column', gap : 5, width : "100%"}}>
+                    <Text style={{ textAlign : 'center', fontWeight : "300", fontSize : 15}} >Séance de ma classe</Text>
+                    <View style={{paddingHorizontal : "0.5%",   height : 30, backgroundColor :"#FCFCFC", flexDirection : 'row', borderRadius : 10, borderWidth : 3, borderStyle : 'solid'}}>
+                        <View style={{ flex : 10, alignItems :'center', justifyContent : 'center'}}>
+                            <Text style={{textAlign : 'center', textAlignVertical : 'center', fontWeight : "bold"}}>P</Text>
+                        </View>
+                        <View style={{ flex : 25, alignItems :'center', justifyContent : 'center', borderLeftWidth : 2, borderStyle : 'solid'}}>
+                            <Text style={{textAlign : 'center', textAlignVertical : 'center', fontWeight : "300", fontSize : 12, }}>YYYY/MM/JJ</Text>
+                        </View>
+                        <View style={{ flex : 65, flexDirection : 'row'}}>
+                            <View style={{ padding : "1%", flex : 1, alignItems : 'center', borderLeftWidth : 2, borderStyle : 'solid'}}>
+                                <Image source={require('../../assets/Eco/velo.png')} style={{flex : 1,height : "100%", resizeMode : 'center'}}/>
+                            </View>
+                            <View style={{ padding : "1%",flex : 1, alignItems : 'center', borderLeftWidth : 2, borderStyle : 'solid', }}>
+                                <Image source={require('../../assets/Eco/autobus.png')} style={{flex : 1,height : "100%", resizeMode : 'center'}}/>
+                            </View>
+                            <View style={{ padding : "1%", flex : 1, alignItems : 'center', borderLeftWidth : 2, borderStyle : 'solid'}}>
+                                <Image source={require('../../assets/Eco/voiture.png')} style={{flex : 1,height : "100%", resizeMode : 'center'}}/>
+                            </View>
+                            <View style={{ padding : "1%", flex : 1, alignItems : 'center', borderLeftWidth : 2, borderStyle : 'solid'}}>
+                                <Image source={require('../../assets/Eco/covoiturage.png')} style={{flex : 1,height : "100%", resizeMode : 'center'}}/>
+                            </View>
+                            <View style={{ padding : "1%",flex : 1, alignItems : 'center', borderLeftWidth : 2, borderStyle : 'solid'}}>
+                                <Image source={require('../../assets/Eco/trottinette.png')} style={{flex : 1,height : "100%", resizeMode : 'center'}}/>
+                            </View>
+                            <View style={{  padding : "1%",flex : 1, alignItems : 'center', borderLeftWidth : 2, borderStyle : 'solid'}}>
+                                <Image source={require('../../assets/Eco/pieton.png')} style={{flex : 1,height : "100%", resizeMode : 'center'}}/>
+                            </View>
+                        </View>
+                    </View>
+                    <FlatList
+                        style={{flex : 70, borderRadius  : 10}}
+                        data={isLoad ? listeSeanceEco : null}
+                        renderItem={(item) => {
+                            console.log(item)
+                            return  <SeanceEco item={item.item}/>
+                    
+                        }}
+                    
+                    />
+
+
+                </View>
+                {(isAdmin ? currentUser.mail == currentClasse.mailProf : false) ? 
+
+                    <View style={{padding : "2%",flex : 10, display : "flex", flexDirection : 'row', justifyContent : 'center', width : "100%"}}>
+                            <ImageButton source={require('../../assets/plus.png')} bgColor={"#94265B"} action={handleGoAddSeanceEco}/>
+                    </View> 
+
+                : null}
 
 
  

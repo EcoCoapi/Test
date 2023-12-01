@@ -4,8 +4,13 @@ export const GlobalStateContext = createContext()
 
 export const GlobalStateProvider = ({ children }) => {
 
-    const [currentUser, setCurrentUser] = useState(
-      null)
+    const [currentUser, setCurrentUser] = useState({
+      mail : "admin@admin",
+      motDePasse : "$2a$10$CwTycUXWue0Thq9StjUM0uQxTmrjFScyO75eSyjhW70lhBvVR/VTK",
+      nom : "adminivih", 
+      prenom : "admingu", 
+      id_ecole : 9
+    })
 
     //num_dep ; dep_name ; region_name
     const LISTE_DEPT = [
@@ -531,7 +536,7 @@ export const GlobalStateProvider = ({ children }) => {
 
     const url = "https://app-6ce05b9a-0764-405a-b307-00ab053ef906.cleverapps.io"
     const saltHash = '$2a$10$CwTycUXWue0Thq9StjUM0u'
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(true)
 
 
 
