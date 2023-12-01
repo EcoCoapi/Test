@@ -37,6 +37,7 @@ import ChallengeScreen from './pages/Challenge/ChallengeScreen';
 import InscrireChallenge from './pages/Challenge/InscrireChallengeScreen';
 import FirstScreen from './pages/Account/FirstScreen';
 import EditAdminScreen from './pages/Account/EditAdminScreen';
+import GroupeclasseScreen from './pages/Classe/GroupeClasseScreen.jsx';
 
 
 
@@ -202,6 +203,11 @@ export default function App() {
         <Stack.Screen 
           name="Inscription-Challenge" 
           component={InscrireChallenge}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen 
+          name="Groupe-Classe" 
+          component={GroupeclasseScreen}
           options={{headerShown: false}}
         />
 

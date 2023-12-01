@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { View , Image, Text, Pressable} from "react-native";
 
 
-export default function CompteurEco({image, name, view}) {
+export default function CompteurEco({image, value, setValue}) {
 
-    const [compteur, setCompteur] = useState(0)
-    const [lien , setLien] = useState(image)
-    const [nom, setNom] = useState(name)
+    const [lien , setLien] = useState(null)
 
 
 
@@ -37,36 +35,42 @@ export default function CompteurEco({image, name, view}) {
     }
 
     const handleMoins = () => {
-        if(compteur !== 0) {
-            setCompteur(compteur-1)
+        if(value !== 0) {
+            setValue(value-1)
         }
     }
     const handlePlus = () => {
-        setCompteur(compteur+ 1)
+        setValue(value+ 1)
     }
 
     return (
-        <View onLayout={load} style={{
-            display :'flex', 
-            flexDirection : 'column', 
-            alignItems : 'center', 
-            gap : "3"
-        }}>
-            <Text style={{fontWeight : 'bold'}}>{nom}</Text>
-            <Image 
+        <View onLayout={load} style={{width : "100%", flexGrow : 1,  backgroundColor : "#EFE4E1", flexDirection : 'column', alignItems : 'center', gap : 3, padding : "3%", borderRadius : 10, borderWidth : 3, borderStyle : 'solid'}}>
+            <View style={{ flex: 60, width : "100%", alignItems : 'center'}}>
+                <Image source={lien} style={{flex : 1, resizeMode : 'center'}}/>
+            </View>
             
-                source={lien}
-                style={{
-                    height : 70, 
-                    width  : 70
-                }}
-            />
-            <View style={{
-                display : 'flex', 
-                flexDirection : 'row', 
-                alignItems : 'center',
-                gap : "8"
-            }}>
+            <View style={{ flex: 40, width : "100%", flexDirection : 'row', justifyContent : 'center', alignItems : 'center', gap : 3}}>
+                <Pressable style={{flex : 30, height : "100%", justifyContent : 'center', alignItems : 'center'}} onPress={handleMoins}>
+                    <Image source={require('../assets/Eco/moins.png')} style={{flex : 1, resizeMode : 'center', width : "100%",}}/>
+                </Pressable>
+                <Text style={{flex : 40, backgroundColor : "#000", color : "#FFF", textAlign : 'center', fontSize : 18, borderRadius : 6, borderWidth : 1, borderStyle : 'dotted'}}>{value}</Text>
+                <Pressable style={{flex : 30,height : "100%", justifyContent : 'center', alignItems : 'center'}} onPress={handlePlus}>
+                    <Image source={require('../assets/Eco/plus.png')} style={{flex : 1, resizeMode : 'center', width : "100%"}}/>
+                </Pressable>
+            </View>
+
+        
+
+
+
+        </View>
+
+    )
+
+}
+
+/*
+
                 {!view ? <Pressable onPress={handleMoins}>
                     <Image                 
                     style={{
@@ -86,10 +90,5 @@ export default function CompteurEco({image, name, view}) {
                     }}
                     source={require('../assets/Eco/plus.png')}/>
                 </Pressable> : null}
-            </View>
 
-        </View>
-
-    )
-
-}
+                */

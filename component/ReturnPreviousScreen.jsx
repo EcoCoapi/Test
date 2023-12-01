@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 
 
 
-export default function ReturnPreviousScreen ({titre, enable, disable}) {
+export default function ReturnPreviousScreen ({titre, enable, disable, differentWay}) {
 
     const navigation = useNavigation();
 
@@ -45,7 +45,7 @@ export default function ReturnPreviousScreen ({titre, enable, disable}) {
 
     return (
         <View style={styles.navbar} onLayout={isAdmin ? load : null}>
-            {enable ? <Pressable onPress={handleGoBack}>
+            {enable ? <Pressable onPress={differentWay ? differentWay : handleGoBack}>
                 <Image
                     style={styles.image}
                     source={require('../assets/Header/fleche-gauche-bouton-noir-carre.png')}

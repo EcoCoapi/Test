@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Image, Pressable, StyleSheet } from "react-native";
+import { View, Text, Image, Pressable, StyleSheet, TouchableOpacity } from "react-native";
 import { GlobalStateContext } from "../global";
 
 export default function Challenge({navigation, name, viewChall}) {
@@ -19,16 +19,13 @@ export default function Challenge({navigation, name, viewChall}) {
 
     const handleGoChallenge = () => {
         setCurrentChallenge(nom)
-        viewChall ? navigation.navigate("Challenge") : navigation.navigate("ChallengeClasse")
+
     }
 
     return (
-        <View style={styles.container}>
-            <Text styles={styles.text}>{nom}</Text>
-            <Pressable onPress={handleGoChallenge}>
-                <Image style={styles.image} source={require('../assets/rightArrow.png')}/>
-            </Pressable>
-        </View>
+        <TouchableOpacity onPress={handleGoChallenge} style={styles.container}>
+            <Text style={styles.text}>{nom}</Text>
+        </TouchableOpacity>
 
 
     )
@@ -38,21 +35,25 @@ export default function Challenge({navigation, name, viewChall}) {
 const styles = StyleSheet.create({
 
     container : {
+        margin : "3%", 
+        borderWidth : 3, 
+        borderStyle : 'solid', 
         display : 'flex', 
         flexDirection : 'row',
         alignItems : 'center',
-        justifyContent: 'space-between',
-        paddingTop : 30,
-        paddingLeft : 10,
+        justifyContent: 'center',
+        padding : "4%", 
+        backgroundColor : "#3D1E7B", 
+        borderRadius : 11
     
     },
     text : {
+
+
         fontWeight : 'bold',
-        fontSize : 18
+        fontSize : 18, 
+        textAlignVertical : 'center', 
+        color : "#fff"
     }, 
-    image : {
-        
-        width : 30,
-        height : 30
-    }
+
 })

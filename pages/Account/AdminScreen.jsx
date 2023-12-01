@@ -17,7 +17,7 @@ const MessageSource = "../../assets/Admin/discuter.png"
 
 export default function AdminScreen({navigation}) {
 
-    const {currentUser, url} = useContext(GlobalStateContext)
+    const {currentUser, currentClasse, currentEcole, currentGroupeChallengeEco, url} = useContext(GlobalStateContext)
 
     const [ecole, setEcole] = useState(null)
     const [isLoad, setIsLoad] = useState(null)
@@ -107,6 +107,16 @@ export default function AdminScreen({navigation}) {
 
     }
 
+    const showGlobal = () => {
+
+        console.log(currentUser)
+        console.log(currentEcole)
+        console.log(currentClasse)
+        console.log(currentGroupeChallengeEco)
+
+
+    }
+
 
     return (
 
@@ -150,9 +160,11 @@ export default function AdminScreen({navigation}) {
                         <View style={styles.containerClasse}>
                             <Image style={styles.image} source={require(MessageSource)}/>
                             <Text style={styles.text2}>{"Message"}</Text>
+                            <Button title='Info globales' onPress={showGlobal}/>
                         </View>
                     </View>
                     <CustomButton color={"#94265B"} text={"Mettre à jour"} textColor={"#fff"} width={"80%"} height={"7%"} action={handleGoEditAdmin}/>
+                    
                 </View>
 
         </LinearGradient>

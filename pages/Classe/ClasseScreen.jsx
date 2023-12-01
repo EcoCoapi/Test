@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Button, Pressable, Image, FlatList } from "react-native";
+import { View, Text, StyleSheet, Button, Pressable, Image, FlatList, SafeAreaView } from "react-native";
 import NavBar from "../../component/NavBar";
 import ReturnPreviousScreen from "../../component/ReturnPreviousScreen";
 import { GlobalStateContext } from "../../global";
@@ -10,6 +10,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import CustomButton from "../../component/CustomButton";
 import axios from "axios";
 import ChallengeClasse from "../../component/ChallengeClasse";
+import ChallengeEcoButton from "../../component/ChallengeEcoButton";
 
 export default function ClasseScreen({navigation}) {
 
@@ -27,7 +28,7 @@ export default function ClasseScreen({navigation}) {
 
         const newList = listeChall
 
-        const l = currentClasse.idChallenge.slice(0, -1).split("|")
+        const l = currentClasse.idChallenge ? currentClasse.idChallenge.slice(0, -1).split("|") : []
 
         const request = await Promise.all(l?.map((id) => {
             return axios.get(`${url}/challenges/${id}`)
@@ -36,7 +37,6 @@ export default function ClasseScreen({navigation}) {
         }))
 
         request.map(item => newList.push(item.data[0]))
-        console.log(newList)
         setListChall(newList)
 
         setIsLoad(true)
@@ -53,8 +53,8 @@ export default function ClasseScreen({navigation}) {
         navigation.navigate("Add-Challenge")
     }
 
-    const handleGoChallengeEco = () => {
-        navigation.navigate("Challenge-ECO")
+    const handleGoGroupe = () => {
+        navigation.navigate("Groupe-Classe")
 
     }
 
@@ -75,21 +75,14 @@ export default function ClasseScreen({navigation}) {
                 <ReturnPreviousScreen enable titre={'Classe'} />
             </View>
             <Classe item={currentClasse} disable/>
-            <View style={styles.container}>
-                {isLoad ? 
+            <SafeAreaView style={styles.container}>
+                <ChallengeEcoButton action={handleGoGroupe}/>
                 <FlatList
-                    style={{padding : "2%"}}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
                     data={isLoad ? listeChall : null}
-                    renderItem={({item}) => {
-                        <Classe item={item} name={item.nom} nb={0}/>
-                        }}
+                    renderItem={({item}) => <Challenge name={item.nom}/>}
+                    
                 />
-                :
-                null
-                }
-            </View>
+            </SafeAreaView>
 
 
         </LinearGradient>
@@ -112,7 +105,6 @@ export default function ClasseScreen({navigation}) {
 }
 const styles = StyleSheet.create({
     containerClasse : {
-        flex : 1, 
         backgroundColor : "#737373", 
         marginHorizontal: 30,
         padding : 10, 
@@ -163,13 +155,8 @@ const styles = StyleSheet.create({
     }, 
     container : {
         flex : 1, 
-        borderWidth : 1, 
-        borderStyle : "solid",
         padding : "2%",
         width : "85%",
-        display : 'flex', 
-        flexDirection : 'column',
-        alignItems : 'center',
         gap : 8
     }, 
     textInput : {

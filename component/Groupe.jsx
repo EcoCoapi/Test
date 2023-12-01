@@ -1,30 +1,42 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Pressable, Image } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image, TouchableOpacity } from "react-native";
 import { GlobalStateContext } from "../global";
+import { useNavigation } from "@react-navigation/native";
 
-export default function Groupe({navigation, name, prive}) {
+export default function Groupe({groupe, owner, action, disable}) {
 
-    const {setCurrentGroupeChallengeEco} = useContext(GlobalStateContext)
+    const navigation = useNavigation()
+
+    const {setCurrentGroupeChallengeEco, currentClasse} = useContext(GlobalStateContext)
 
     const [id, setId] = useState(null)
-    const [nom, setNom] = useState(name)
-    const [isPrive, setIsPrive] = useState(prive)
     const [listeClasse, setListeClasse] = useState([]) 
+    const [isIn, setIsIn] = useState(false)
 
     const handleGoGroupe = () => {
-        setCurrentGroupeChallengeEco(nom)
+        console.log("groupe")
+        setCurrentGroupeChallengeEco(groupe)
         navigation.navigate("Groupe-Challenge-Eco")
+
+    }
+
+    const load = () => {
+
+        groupe.listeClasse.slice(0, -1).split("|").map(c => {
+            c === currentClasse.id_classe ? setIsIn(true) : null
+        })
+        
 
     }
 
 
     return (
-        <View style={styles.container}>
-            <Text styles={styles.text}>{name}</Text>
-            <Pressable onPress={handleGoGroupe}>
-                <Image style={styles.image} source={require('../assets/rightArrow.png')}/>
-            </Pressable>
-        </View>
+        <TouchableOpacity onLayout={load} style={[styles.container, {backgroundColor : owner ? "#f00" : "#3D1E7B" }]} onPress={action} disabled={disable}>
+            <Text style={styles.text}>{groupe.nom}</Text>
+            
+                <Text style={{margin : "2%", color : "#fff"}}>{`${groupe.listeClasse.slice(0, -1).split("|").length} Classe${groupe.listeClasse.slice(0, -1).split("|").length == 1 ? "" : "s"}`}</Text>
+                <Text style={{fontWeight : '500', fontSize : 14, backgroundColor : groupe.isPublic === 0 ? "#FAC172" : "#00BF63", padding : 4, borderWidth : 2, borderStyle : 'solid', textAlign : 'center', verticalAlign : 'middle', borderColor : '#FFF', borderRadius : 4}}>{groupe.isPublic === 0 ? "Privé" : "Public"}</Text>
+        </TouchableOpacity>
 
 
     )
@@ -37,14 +49,22 @@ const styles = StyleSheet.create({
         display : 'flex', 
         flexDirection : 'row',
         alignItems : 'center',
-        justifyContent: 'space-between',
-        paddingTop : 30,
-        paddingLeft : 10,
+        justifyContent : 'space-around', 
+        padding : '3%', 
+        margin : "3%", 
+        opacity : 0.7, 
+        borderWidth : 2, 
+        borderStyle : 'solid', 
+        borderRadius : 10
     
     },
     text : {
+        color : "#eee",
+        height : "100%",
+        textAlignVertical : 'center',
         fontWeight : 'bold',
-        fontSize : 18
+        fontSize : 25,
+        width : "60%"
     }, 
     image : {
         

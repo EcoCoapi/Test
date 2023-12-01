@@ -54,8 +54,8 @@ export default function EcoleButton({navigation, nom, ville, num}) {
 
         <TouchableOpacity style={styles.container} onPress={handleGoEcole} onLayout={load}>
             <Image style={styles.image} source={source}/>
-            <View style={{display : 'flex', flexDirection :'column', height : '100%', marginTop : "8%"}}>
-                <Text style={styles.text1}>{nom}</Text>
+            <View style={styles.container_info_ecole_button}>
+                <Text style={styles.nom_ecole_button}>{nom}</Text>
                 <Text style={styles.text2}>{ville}</Text>
 
             </View>
@@ -66,6 +66,13 @@ export default function EcoleButton({navigation, nom, ville, num}) {
 }
 
 const styles = StyleSheet.create({
+
+    container_info_ecole_button : {
+        display : 'flex', 
+        flexDirection :'column', 
+        height : '100%', 
+        marginTop : "8%"
+    },
 
     container : {
         alignSelf : 'center',
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
 
     }, 
 
-    text1 : {
+    nom_ecole_button : {
         textAlign : 'left',
         fontWeight : 'bold',
         fontSize : 18, 
